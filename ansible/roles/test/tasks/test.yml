@@ -1,0 +1,83 @@
+---
+# - name: make cache dir
+  # file: dest=/var/cache/yum/x86_64 state=directory owner=root group=root mode=0755
+
+
+
+
+# - name: install apache
+  # yum: name=httpd state=latest
+
+# - name: install apache modules
+  # yum: state=installed name={{ item }}
+  # with_items:
+    # - mod_ssl
+    # - openssh
+
+# - name: write the apache config file
+  # template: src=httpd.conf.j2 dest=/etc/httpd/conf/httpd.conf
+
+# - name: create virtual host file for vhosts
+  # template: src=vhosts.conf.j2 dest=/etc/httpd/conf.d/vhosts.conf
+
+# - name: httpd restarted
+  # service: name=httpd enabled=yes state=restarted
+
+
+
+- name: install yum packages
+  yum: name={{ item }} state=latest
+  with_items:
+  - httpd
+  - python-setuptools
+  - mod_ssl
+  - openssh
+  notify: change owner
+
+- name: install easy_install packages
+  easy_install: name=pip
+
+- name: install pip packages
+  pip: name=httplib2
+
+# - name: copy index.html
+  # copy: src=~/Vagrant/development/app/webroot/index.html dest={{ doc_root }}
+
+- name: write the apache config file
+  template: src=httpd.conf.j2 dest=/etc/httpd/conf/httpd.conf
+
+- name: create virtual host file for vhosts
+  template: src=vhosts.conf.j2 dest=/etc/httpd/conf.d/vhosts.conf
+
+
+- name: start httpd
+  service: name=httpd enabled=yes state=started
+
+- name: check httpd is working
+  uri: url=http://localhost/
+
+
+
+
+# - name: set yum repository for the mysql
+  # yum: name=http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+
+
+
+
+
+# - name: installed mysql
+  # yum: name=mysql-community-server enablerepo=mysql56-community state=present
+
+# - name: install MySQL-python
+  # yum: name=MySQL-python state=latest
+  # notify: setup mysql
+
+# - name: mysql | Create databases
+  # mysql_db: name={{ database.db }} state=present
+  # with_items: mysql
+
+# - name: mysql | Create users
+  # mysql_user: name={{ database.user }} password={{ database.pass }} priv={{ database.db }}.*:ALL state=present
+  # with_items: mysql
+

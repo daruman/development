@@ -1,0 +1,6 @@
+---
+- name: set yum repository for the epel
+  yum: name=epel-release state=latest
+  notify: yum update
+  tags: 'repo'
+

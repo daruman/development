@@ -1,0 +1,15 @@
+# Default Apache virtualhost template
+
+
+<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    DocumentRoot {{ doc_root }}
+    ServerName {{ servername }}
+    ErrorLog logs/{{ servername }}-error_log
+    CustomLog logs/{{ servername }}-access_log common
+    Options Indexes FollowSymLinks
+    <Directory {{ doc_root }}>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>

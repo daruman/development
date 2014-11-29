@@ -1,0 +1,3 @@
+---
+- name: change local time
+  copy: src=/usr/share/zoneinfo/Japan dest=/etc/localtime owner=vagrant

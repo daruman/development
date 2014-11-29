@@ -1,0 +1,10 @@
+---
+- name: stoped filewall
+  command: systemctl stop firewalld.service
+  tags:
+      - deps_apache
+
+- name: disabled filewall
+  command: systemctl disable firewalld.service
+  tags:
+      - deps_apache

@@ -1,0 +1,13 @@
+---
+# - name: setup apache
+  # service: name=httpd state=started enabled=yes
+
+- name: change owner
+  file: dest=/var/www/html owner=vagrant recurse=yes
+
+# - name: restart apache
+  # service: name=httpd state=restarted
+
+# - name: setup mysql
+  # service: name=mysqld state=started enabled=yes
+

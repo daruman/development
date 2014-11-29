@@ -1,0 +1,4 @@
+---
+- name: set yum repository for the mysql
+  yum: name=http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+  tags: 'repo'

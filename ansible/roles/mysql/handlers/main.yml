@@ -1,0 +1,4 @@
+---
+- name: setup mysql
+  service: name=mysqld state=started enabled=yes
+

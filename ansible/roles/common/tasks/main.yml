@@ -1,0 +1,8 @@
+---
+- include: single-request-reopen.yml
+- include: firewall.yml
+- include: time.yml
+- include: epelrepo.yml
+- include: remirepo.yml
+- include: mysqlrepo.yml
+- include: selinux.yml
