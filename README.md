@@ -34,14 +34,6 @@ $ vagrant plugin install vagrant-vbguest
 通常の使用方法
 ================================================================================
 
-すぐに使う
---------------------------------------------------------------------------------
-
-設定をいじってから使う
---------------------------------------------------------------------------------
-
-Vagrantfileやansibleの設定をいじったら、以下の手順で起動し各種動作確認。
-
 ```
 # 起動+プロビジョニング
 $ vagrant up
@@ -50,13 +42,32 @@ $ vagrant up
 $ vagrant reload
 ```
 
-プロビジョニング中にエラーした場合、解決後にプロビジョニングを再開する。
+各種ファイルを残したくない場合、
+projectディレクトリ等ではない箇所にcloneし、起動確認した後
+boxを作成登録し、必要な箇所で使用すれば良い。
 ```
-$ vagrant provision
-```
+# 適当な箇所にclone
+$ git clone git@github.com:daruman/development.git
+$ cd development
+# 起動
+$ vagrant up
+$ vagrant reload
 
-webserver等含んでいる場合はブラウザからの表示確認、  
-dbを含んでいる場合はlogin確認の他、hostOSからのアクセス確認をしておく。
+# 動作確認
+
+# box作成
+$ vagnrant package
+# box登録
+$ vagnrant box add {box名} ./package.box
+# 削除
+$ cd ../
+$ rm -rf development/
+
+# projectディレクトリ等に移動、先ほどのboxを使用
+$ cd projectDir
+$ vagrant init {box名}
+$ vagrant up
+```
 
 
 
@@ -85,6 +96,18 @@ OSやミドルウェアをあわせる必要があれば`ansible/group_vars/`の
 
 ただし、基本的に_ansible/localのIPは変更しない_
 
+
+
+動作確認
+--------------------------------------------------------------------------------
+
+プロビジョニング中にエラーした場合、解決後にプロビジョニングを再開する。
+```
+$ vagrant provision
+```
+
+webserver等含んでいる場合はブラウザからの表示確認、  
+dbを含んでいる場合はlogin確認の他、hostOSからのアクセス確認をしておく。
 
 
 [1]: http://kashewnuts.bitbucket.org/2013/08/25/vagrantvbguest.html
