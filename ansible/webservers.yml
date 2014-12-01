@@ -3,7 +3,6 @@
   sudo: true
   vars_files:
     - group_vars/all
-    - group_vars/webservers
   roles:
     - common
     - apache
