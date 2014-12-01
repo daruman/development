@@ -5,6 +5,8 @@ virtualbox + vagrant + ansible
 ansibleに関しては主にこれをベースに構成
 [Best Practices — Ansible Documentation](http://docs.ansible.com/playbooks_best_practices.html)
 
+このRepositoryは開発環境用boxを作るためのもの  
+普段の開発はこの設定で生成されたboxを利用してvagrant initするだけ。
 
 
 
