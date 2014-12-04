@@ -9,12 +9,11 @@ ansibleに関しては主にこれをベースに構成
 普段の開発はこの設定で生成されたboxを利用してvagrant initするだけ。
 
 
-
-
 事前準備
 ================================================================================
 
 使う際に共通で行う事前準備
+
 
 Vagrantにplugin追加
 --------------------------------------------------------------------------------
@@ -30,44 +29,34 @@ $ vagrant plugin install vagrant-vbguest
 
 
 
-
-
-
-通常の使用方法
+通常の使用方法(初回)
 ================================================================================
 
 ```
+# 適当な箇所にclone
+$ git clone git@github.com:daruman/development.git development_env
+$ cd $_
+
 # 起動+プロビジョニング
 $ vagrant up
 
 # SELinux設定変更を含む場合、up後にreloadする
-$ vagrant reload
-```
-
-各種ファイルを残したくない場合、
-projectディレクトリ等ではない箇所にcloneし、起動確認した後
-boxを作成登録し、必要な箇所で使用すれば良い。
-```
-# 適当な箇所にclone
-$ git clone git@github.com:daruman/development.git
-$ cd development
-# 起動
-$ vagrant up
 $ vagrant reload
 
 # 動作確認
 
 # box作成
 $ vagnrant package
-# box登録
-$ vagnrant box add {box名} ./package.box
-# 削除
-$ cd ../
-$ rm -rf development/
 
-# projectディレクトリ等に移動、先ほどのboxを使用
+# box登録
+$ vagnrant box add development ./package.box
+
+# 終了
+$ vagrant halt
+
+# 使用するディレクトリ等に移動、先ほどのboxを使用
 $ cd projectDir
-$ vagrant init {box名}
+$ vagrant init development
 $ vagrant up
 ```
 
@@ -85,31 +74,38 @@ defaultは開発用に適当に設定されているので
 projectに合わせて必要に応じて以下を修正（主にhost名やドキュメントルート等の設定  
 (デプロイ用にも出来るけどよくよく精査する必要があるんで今んとこ考えてない)
 
-
 - Vagrantfile
 - インベントリファイル
     - ansible/local
 - playbook
     - ansible/site.yml
     - ansible/project.yml
+
 その他、projectに合わせた内容を`ansible/role/project`に作っていく。  
 OSやミドルウェアをあわせる必要があれば`ansible/group_vars/`の変数、  
 それで足りなければ`ansible/role/common`ほか、いじっていく。
 
-ただし、基本的に_ansible/localのIPは変更しない_
-
+また、先に`vagrant up`した後に`vagrant ssh-config`でhostとportを確認し  
+ansible/localを追加修正する必要がある場合も。
 
 
 動作確認
 --------------------------------------------------------------------------------
 
-プロビジョニング中にエラーした場合、解決後にプロビジョニングを再開する。
+プロビジョニング中にエラーがあり解決した後や既に起動している場合、プロビジョニングを再開する。
 ```
 $ vagrant provision
 ```
 
 webserver等含んでいる場合はブラウザからの表示確認、  
 dbを含んでいる場合はlogin確認の他、hostOSからのアクセス確認をしておく。
+
+
+
+
+
+
+
 
 
 [1]: http://kashewnuts.bitbucket.org/2013/08/25/vagrantvbguest.html
