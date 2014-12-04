@@ -6,3 +6,4 @@
 - include: remirepo.yml
 - include: mysqlrepo.yml
 - include: selinux.yml
+- include: command.yml
