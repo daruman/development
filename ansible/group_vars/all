@@ -3,7 +3,7 @@
 timezone: Asia/Tokyo
 
 # apacheドキュメントルート
-doc_root: /vagrant/app/webroot
+doc_root: /vagrant/projectCode/webroot
 
 # server name
 servername: develop.local
