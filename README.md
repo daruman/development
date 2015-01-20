@@ -71,20 +71,23 @@ $ vagrant up
 設定変更
 --------------------------------------------------------------------------------
 
-defaultは開発用に適当に設定されているので  
-projectに合わせて必要に応じて以下を修正（主にhost名やドキュメントルート等の設定  
-(デプロイ用にも出来るけどよくよく精査する必要があるんで今んとこ考えてない)
+変更が必要な可能性のあるファイルは以下  
+(開発環境としてなので、商用インベントリファイルの修正とかそゆのは含まない)
 
-- Vagrantfile
-- インベントリファイル
-    - ansible/local
-- playbook
-    - ansible/site.yml
-    - ansible/project.yml
 
-その他、projectに合わせた内容を`ansible/role/project`に作っていく。  
-OSやミドルウェアをあわせる必要があれば`ansible/group_vars/`の変数、  
-それで足りなければ`ansible/role/common`ほか、いじっていく。
+### Vagrantfile
+
+定数変更によるIPアドレス、サーバ名、ドキュメントルートの変更
+ansibleの変数の上書き(`ansible.extra_vars`)
+ansibleの変数は`ansible/group_vars/`や`ansible/host_vars/`以下)
+
+
+### playbook
+
+起点となる`ansible/site.yml`及び、そこから呼ばれる子playbookにて
+実行するroleを選択する。
+
+
 
 
 動作確認

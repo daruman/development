@@ -1,17 +1,27 @@
 ---
+# 全てのhostに適用される値(default)
+
 # 使用するタイムゾーン
 timezone: Asia/Tokyo
 
 # apacheドキュメントルート
-doc_root: /vagrant/projectCode/webroot
+# doc_root: /vagrant/projectCode/webroot
 
 # server name
-servername: develop.local
+# localではvagrandから設定、下記パラメータはデプロイする場合に使用
+# servername: develop.local
 
 # サーバーにインストールするコマンド
 install_commands:
 - tree
 - jq
+
+# 以下、apache6.5用
+- kernel-devel
+- kernel-headers
+- dkms
+- gcc
+- gcc-c++
 
 # remi-php56repoのような先行バージョン専用Repositoryから落とせるもの
 php_packages:
