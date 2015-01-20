@@ -2,8 +2,3 @@
 - name: install command
   yum: name={{ item }} state=latest
   with_items: install_commands
-
-- name: install python-setuptools
-  yum: name=python-setuptools state=latest
-- name: install easy_install package
-  easy_install: name=pip

@@ -1,8 +1,6 @@
 # ローカル環境用のインベントリファイル
 [webservers]
-# default ansible_ssh_host=127.0.0.1 ansible_ssh_port=2222 ansible_ssh_user=vagrant
-127.0.0.1 ansible_ssh_port=2222 ansible_ssh_user=vagrant
-
+192.168.30.10
 
 # [dbservers]
 # そのうち分けるかも

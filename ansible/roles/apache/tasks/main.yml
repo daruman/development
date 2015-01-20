@@ -10,9 +10,6 @@
     - openssh
   tags: apache
 
-- name: install pip package
-  pip: name=httplib2
-
 - name: write the apache config file
   template: src=httpd.conf.j2 dest=/etc/httpd/conf/httpd.conf
   tags: apache
@@ -23,6 +20,3 @@
 
 - name: be sure httpd is running and enabled
   service: name=httpd state=running enabled=yes
-
-- name: check httpd is working
-  uri: url=http://localhost/
