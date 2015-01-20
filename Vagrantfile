@@ -27,8 +27,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         ansible.limit = 'all'
         ansible.playbook = 'ansible/site.yml'
         ansible.inventory_path = "ansible/local"
-        # ansible.extra_vars = { ansible_ssh_user: 'vagrant' }
 
-        #ansible.inventory_path = ".vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory"
+        # debug用
+        # ansible.verbose =  'vvvv'
     end
 end
