@@ -14,6 +14,9 @@ ansibleに関しては主にこれをベースに構成
 
 使う際に共通で行う事前準備
 
+- virtualbox
+- vagrant
+- ansible
 
 Vagrantにplugin追加
 --------------------------------------------------------------------------------
@@ -32,6 +35,12 @@ $ vagrant plugin install vagrant-vbguest
 通常の使用方法(初回)
 ================================================================================
 
+hostsに追加
+```
+sudo echo '192.168.30.10   develop.local' >> /path/hosts
+```
+
+以下使用方法
 ```
 # 適当な箇所にclone
 $ git clone git@github.com:daruman/development.git development_env
@@ -46,10 +55,10 @@ $ vagrant reload
 # 動作確認
 
 # box作成
-$ vagnrant package
+$ vagrant package
 
 # box登録
-$ vagnrant box add development ./package.box
+$ vagrant box add development ./package.box
 
 # 終了
 $ vagrant halt
