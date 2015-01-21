@@ -6,10 +6,10 @@
     - apache22
 
 - name: install apache modules
+
+  yum: name={{ item }} state=latest
   yum: state=installed name={{ item }}
-  with_items:
-    - mod_ssl
-    - openssh
+  with_items: install_apache_modules
   tags:
     - apache24
     - apache22

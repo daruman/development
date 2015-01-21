@@ -22,6 +22,11 @@ install_commands:
 - gcc
 - gcc-c++
 
+# installするapacheモジュール
+install_apache_modules
+- mod_ssl
+- openssh
+
 # remi-php56repoのような先行バージョン専用Repositoryから落とせるもの
 php_packages:
 - php-devel
