@@ -35,17 +35,23 @@ DOC_ROOT = "/vagrant/projectCode/webroot"
 OS_TYPE = CENT_OS_6
 
 # 使用するansible tags(OSとhttpdは自動設定)
-# PLAY_TAGS = ['php56', 'mysql56']
-PLAY_TAGS = []
+# PLAY_TAGS = ['php56', 'mysql56', 'project']
+PLAY_TAGS = ['php56', 'mysql56']
 
 
+# Configuration
+# ================================================================================
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+    # box
+    # --------------------------------------------------------------------------------
     config.vm.box = OS_TYPE['box_name']
     if OS_TYPE.key?('box_url') then
         config.vm.box_url = OS_TYPE['box_url']
     end
 
 
+    # server
+    # --------------------------------------------------------------------------------
     # 建てるサーバが1つでも、以下のdefineがないと自動生成されるvagrant_ansible_inventoryに
     # 出力されるサーバ設定用変数名が`default`になってしまう
 
@@ -65,6 +71,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
     # provision
+    # --------------------------------------------------------------------------------
     config.vm.provision "ansible" do |ansible|
         # vagrantが自動生成するものを使用するのでインベントリファイルは指定しない
 
@@ -75,11 +82,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         ansible.host_key_checking = false
 
         # 実行tags
-        TAGS = [OS_TYPE['tag_os'], OS_TYPE['tag_httpd']]
+        TAGS = [OS_TYPE['tag_os'], OS_TYPE['tag_httpd']] + PLAY_TAGS
         if OS_TYPE.key?('selinux') then
             TAGS = TAGS + ['SELinux']
         end
-        TAGS = TAGS + PLAY_TAGS
         ansible.tags = TAGS.join(',')
 
         ansible.extra_vars = {
