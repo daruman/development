@@ -16,8 +16,6 @@ servername: develop.local
 install_commands:
 - tree
 - jq
-
-# 以下、apache6.5用
 - kernel-devel
 - kernel-headers
 - dkms

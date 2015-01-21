@@ -1,13 +1,13 @@
 ---
 - name: installed mysql
   yum: name=mysql-community-server enablerepo=mysql56-community state=present
-  tags: mysql
+  tags: mysql56
 
 - name: install MySQL-python
   yum: name=MySQL-python state=latest
   notify: setup mysql
-  tags: mysql
+  tags: mysql56
 
 - name: put my.cnf
   template: src=my.cnf.j2 dest=/etc/my.cnf
-  tags: mysql
+  tags: mysql56

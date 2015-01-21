@@ -2,4 +2,4 @@
 - name: disable SELinux
   selinux: state=disabled
   tags:
-      - deps_apache
+    - CentOs7

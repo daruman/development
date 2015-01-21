@@ -10,8 +10,8 @@ HOST_NAME  = "develop.local"
 # apacheのドキュメントルートになる
 DOC_ROOT = "/vagrant/projectCode/webroot"
 
-# 使用OS
-OS = 'CentOs7'
+# 使用するansible tags
+TAGS = Array['CentOs7', 'apache24', 'php56', 'mysql56']
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.box = "centos70"
@@ -47,6 +47,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
         # hostOSの~/.ssh/known_hostsに書き込まない
         ansible.host_key_checking = false
+
+        ansible.tags = TAGS.join(',')
         ansible.extra_vars = {
             'servername' => HOST_NAME,
             'ip_address' => IP_ADDRESS,

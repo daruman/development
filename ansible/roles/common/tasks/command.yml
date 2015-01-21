@@ -2,3 +2,5 @@
 - name: install command
   yum: name={{ item }} state=latest
   with_items: install_commands
+  tags:
+    - CentOs7

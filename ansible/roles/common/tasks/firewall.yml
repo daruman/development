@@ -2,9 +2,9 @@
 - name: stoped firewall
   command: systemctl stop firewalld.service
   tags:
-      - deps_apache
+    - CentOs7
 
 - name: disabled firewall
   command: systemctl disable firewalld.service
   tags:
-      - deps_apache
+    - CentOs7

@@ -4,28 +4,34 @@
   with_items:
     - libmcrypt
     - libmcrypt-devel
+  tags: php56
 
 - name: installed gd, ImageMagick
   yum: name={{ item }} enablerepo=remi state=present
   with_items:
     - gd-last
     - ImageMagick-last
+  tags: php56
 
 # phpとモジュール郡をinstall
 - name: installed php
   yum: name=php enablerepo=remi-php56 state=present
+  tags: php56
 
 - name: installed php module
   yum: name={{ item }} enablerepo=remi-php56 state=present
   with_items: php_packages
+  tags: php56
 
 - name: put php.ini
   copy: src=php.ini dest=/etc/php.ini
+  tags: php56
 
 - name: download composer
   command: /usr/bin/curl -s http://getcomposer.org/installer -o /tmp/composer_installer
+  tags: php56
 
 - name: install composer
   command: /usr/bin/php /tmp/composer_installer --install-dir=/usr/bin --filename=composer
-
   notify: restart apache
+  tags: php56

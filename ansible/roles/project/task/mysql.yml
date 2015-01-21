@@ -2,9 +2,9 @@
 - name: mysql | Create databases
   mysql_db: name={{ database.db }} state=present encoding=utf8
   with_items: mysql
+  tags: project
 
 - name: mysql | Create users
   mysql_user: name={{ database.user }} password={{ database.pass }} priv={{ database.db }}.*:ALL state=present
   with_items: mysql
-
-
+  tags: project
