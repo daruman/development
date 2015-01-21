@@ -77,9 +77,7 @@ $ vagrant up
 
 ### Vagrantfile
 
-定数変更によるIPアドレス、サーバ名、ドキュメントルートの変更
-ansibleの変数の上書き(`ansible.extra_vars`)
-ansibleの変数は`ansible/group_vars/`や`ansible/host_vars/`以下)
+ユーザー定義箇所、及び必要に応じて
 
 
 ### playbook
