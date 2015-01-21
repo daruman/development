@@ -1,7 +1,28 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# 定義
+# ================================================================================
 VAGRANTFILE_API_VERSION = "2" # 変更しない
+
+# OSと対応するbox、対応するhttpdの定義
+CENT_OS_6 = {
+    'tag_os'    => 'CentOs6',
+    'tag_httpd' => 'apache22',
+    'box_name'  => 'hnakamur/centos6.5-x64'
+}
+
+CENT_OS_7 = {
+    'tag_os'    => 'CentOs7',
+    'tag_httpd' => 'apache24',
+    'box_name'  => 'centos70',
+    'box_url'   => 'https://f0fff3908f081cb6461b407be80daf97f07ac418.googledrive.com/host/0BwtuV7VyVTSkUG1PM3pCeDJ4dVE/centos7.box',
+    'selinux'   => true
+}
+
+
+# ユーザー定義
+# ================================================================================
 
 # 下記はhostOSのhostsの設定と合わせる
 IP_ADDRESS = "192.168.30.10"
@@ -10,17 +31,20 @@ HOST_NAME  = "develop.local"
 # apacheのドキュメントルートになる
 DOC_ROOT = "/vagrant/projectCode/webroot"
 
-# 使用するansible tags
-# TAGS = Array['CentOs6', 'apache22', 'php56', 'mysql56', 'project']
-# TAGS = Array['CentOs7', 'apache24', 'php56', 'mysql56', 'SELinux']
-TAGS = Array['CentOs7', 'SELinux']
+# 使用するOS設定
+OS_TYPE = CENT_OS_6
+
+# 使用するansible tags(OSとhttpdは自動設定)
+# PLAY_TAGS = ['php56', 'mysql56']
+PLAY_TAGS = []
+
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-    config.vm.box = "centos70"
-    config.vm.box_url = "https://f0fff3908f081cb6461b407be80daf97f07ac418.googledrive.com/host/0BwtuV7VyVTSkUG1PM3pCeDJ4dVE/centos7.box"
+    config.vm.box = OS_TYPE['box_name']
+    if OS_TYPE.key?('box_url') then
+        config.vm.box_url = OS_TYPE['box_url']
+    end
 
-    # config.vm.box = "hnakamur/centos6.5-x64"
-    # config.vm.hostname = "jfn.local"
 
     # 建てるサーバが1つでも、以下のdefineがないと自動生成されるvagrant_ansible_inventoryに
     # 出力されるサーバ設定用変数名が`default`になってしまう
@@ -50,7 +74,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # hostOSの~/.ssh/known_hostsに書き込まない
         ansible.host_key_checking = false
 
+        # 実行tags
+        TAGS = [OS_TYPE['tag_os'], OS_TYPE['tag_httpd']]
+        if OS_TYPE.key?('selinux') then
+            TAGS = TAGS + ['SELinux']
+        end
+        TAGS = TAGS + PLAY_TAGS
         ansible.tags = TAGS.join(',')
+
         ansible.extra_vars = {
             'servername' => HOST_NAME,
             'ip_address' => IP_ADDRESS,

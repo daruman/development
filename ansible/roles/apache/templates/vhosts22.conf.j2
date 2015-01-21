@@ -1,0 +1,17 @@
+# Default Apache virtualhost template
+
+# httpd.confはそのままにしておく
+# (共有ディレクトリのマウントが遅いので、httpd.confに書くとapache起動時にerrorになる可能性がある)
+
+<VirtualHost *:80>
+    ServerAdmin webmaster@{{ servername }}
+    DocumentRoot {{ doc_root }}
+    ServerName {{ servername }}
+    ErrorLog logs/{{ servername }}-error_log
+    CustomLog logs/{{ servername }}-access_log common
+    <Directory {{ doc_root }}>
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+    </Directory>
+</VirtualHost>

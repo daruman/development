@@ -23,7 +23,7 @@ install_commands:
 - gcc-c++
 
 # installするapacheモジュール
-install_apache_modules
+install_apache_modules:
 - mod_ssl
 - openssh
 
