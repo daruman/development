@@ -40,8 +40,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # provision
     config.vm.provision "ansible" do |ansible|
-        ansible.groups = { "webservers" => ["webserver"] }
+        # vagrantが自動生成するものを使用するのでインベントリファイルは指定しない
 
+        ansible.groups = { "webservers" => ["webserver"] }
         ansible.playbook = 'ansible/site.yml'
 
         # hostOSの~/.ssh/known_hostsに書き込まない

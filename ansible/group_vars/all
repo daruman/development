@@ -1,5 +1,6 @@
 ---
 # 全てのhostに適用される値(default)
+# vagrantのProvisioningで使用される場合、これら値はVagrantFileのほうで上書きする
 
 # 使用するタイムゾーン
 timezone: Asia/Tokyo
@@ -9,7 +10,7 @@ timezone: Asia/Tokyo
 
 # server name
 # localではvagrandから設定、下記パラメータはデプロイする場合に使用
-# servername: develop.local
+servername: develop.local
 
 # サーバーにインストールするコマンド
 install_commands:
