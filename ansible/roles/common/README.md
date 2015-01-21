@@ -3,8 +3,22 @@ common role
 
 主にOSに関する設定
 
-todo
+tags
 -----
-CentOS7を前提とした設定なので、他のバージョンも考慮する場合、分岐を作る
+
+### CentOs6
+
+CentOS6で必要なtaskに付与されるtag
+
+
+### CentOs7
+
+CentOS7で必要なtaskに付与されるtag
+
+
+### SELinux
+
+SELinuxを無効化する必要のあるboxを使用する場合に指定するtag  
+これを使用する場合、`vagrant up`もしくは`vagrant provision`の後に`vagrant reload`必須
 
 

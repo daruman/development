@@ -11,7 +11,9 @@ HOST_NAME  = "develop.local"
 DOC_ROOT = "/vagrant/projectCode/webroot"
 
 # 使用するansible tags
-TAGS = Array['CentOs7', 'apache24', 'php56', 'mysql56']
+# TAGS = Array['CentOs6', 'apache22', 'php56', 'mysql56', 'project']
+# TAGS = Array['CentOs7', 'apache24', 'php56', 'mysql56', 'SELinux']
+TAGS = Array['CentOs7', 'SELinux']
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.box = "centos70"

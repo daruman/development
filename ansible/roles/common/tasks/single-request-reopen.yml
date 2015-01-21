@@ -1,5 +1,6 @@
 ---
-- name: CentOS6,7の名前解決高速化設定
+- name: CentOS6/7の名前解決高速化設定
   lineinfile: dest=/etc/resolv.conf line='options single-request-reopen'
   tags:
     - CentOs7
+    - CentOs6

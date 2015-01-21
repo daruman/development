@@ -2,4 +2,4 @@
 - name: disable SELinux
   selinux: state=disabled
   tags:
-    - CentOs7
+    - SELinux

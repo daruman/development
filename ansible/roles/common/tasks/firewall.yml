@@ -8,3 +8,8 @@
   command: systemctl disable firewalld.service
   tags:
     - CentOs7
+
+- name: stop ip tables
+  shell: service iptables stop
+  tags:
+    - CentOs6

@@ -1,7 +1,8 @@
 ---
 - name: set yum repository for the epel
   yum: name=epel-release state=latest
-  # notify: yum update
+  notify: yum update
   tags:
     - CentOs7
+    - CentOs6
 

@@ -3,3 +3,4 @@
   copy: src=/usr/share/zoneinfo/Japan dest=/etc/localtime owner=vagrant
   tags:
     - CentOs7
+    - CentOs6
