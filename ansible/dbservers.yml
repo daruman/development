@@ -1,11 +1,9 @@
 ---
-- hosts: webservers
+- hosts: dbservers
   sudo: true
   vars_files:
     - group_vars/all
   roles:
     # commonは依存先から呼ばれる
     # - common
-    - apache
-    - php
-    # - mysql
+    - mysql
