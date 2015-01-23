@@ -5,13 +5,6 @@
 # 使用するタイムゾーン
 timezone: Asia/Tokyo
 
-# apacheドキュメントルート
-# doc_root: /vagrant/projectCode/webroot
-
-# server name
-# localではvagrandから設定、下記パラメータはデプロイする場合に使用
-servername: develop.local
-
 # サーバーにインストールするコマンド
 install_commands:
 - tree
@@ -27,21 +20,3 @@ install_apache_modules:
 - mod_ssl
 - openssh
 
-# remi-php56repoのような先行バージョン専用Repositoryから落とせるもの
-php_packages:
-- php-devel
-- php-mysqlnd
-- php-mbstring
-- php-gd
-- php-fpm
-- php-opcache
-- php-mcrypt
-- php-phpunit-PHPUnit
-- php-pecl-xdebug
-- php-xml
-- php-posix
-
-database:
-    db: test_database
-    user: testuser
-    pass: testusertestuser

@@ -3,6 +3,7 @@
   sudo: true
   vars_files:
     - group_vars/all
+    - group_vars/webservers
   roles:
     # commonは依存先から呼ばれる
     # - common

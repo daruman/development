@@ -1,0 +1,22 @@
+---
+
+# apacheドキュメントルート
+doc_root: /vagrant/projectCode/webroot
+
+# server name
+# localではvagrandから設定、下記パラメータはデプロイする場合に使用
+servername: develop.local
+
+# remi-php56repoのような先行バージョン専用Repositoryから落とせるもの
+php_packages:
+- php-devel
+- php-mysqlnd
+- php-mbstring
+- php-gd
+- php-fpm
+- php-opcache
+- php-mcrypt
+- php-phpunit-PHPUnit
+- php-pecl-xdebug
+- php-xml
+- php-posix
