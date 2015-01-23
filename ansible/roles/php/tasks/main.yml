@@ -28,7 +28,7 @@
   tags: php56
 
 - name: download composer
-  command: /usr/bin/curl -s http://getcomposer.org/installer -o /tmp/composer_installer
+  get_url: url=http://getcomposer.org/installer dest=/tmp/composer_installer mode=0440
   tags: php56
 
 - name: install composer

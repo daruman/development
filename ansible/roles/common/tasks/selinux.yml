@@ -1,5 +1,6 @@
 ---
 - name: disable SELinux
   selinux: state=disabled
-  tags:
-    - SELinux
+  # notify: reboot vagrant host
+  tags: SELinux
+

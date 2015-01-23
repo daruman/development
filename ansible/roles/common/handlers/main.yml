@@ -1,3 +1,9 @@
 ---
 - name: yum update
   command: yum -y update
+
+- name: reboot vagrant host
+  command: 'vagrant reload'
+  sudo: false
+  delegate_to: 127.0.0.1
+  changed_when: false

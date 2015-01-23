@@ -1,15 +1,12 @@
 ---
 - name: stoped firewall
   command: systemctl stop firewalld.service
-  tags:
-    - CentOs7
+  tags: CentOs7
 
 - name: disabled firewall
   command: systemctl disable firewalld.service
-  tags:
-    - CentOs7
+  tags: CentOs7
 
 - name: stop ip tables
   shell: service iptables stop
-  tags:
-    - CentOs6
+  tags: CentOs6
