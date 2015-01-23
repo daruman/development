@@ -9,7 +9,7 @@ VAGRANTFILE_API_VERSION = "2" # 変更しない
 CENT_OS_6 = {
     'tag_os'    => 'CentOs6',
     'tag_httpd' => 'apache22',
-    'box_name'  => 'hnakamur/centos6.5-x64'
+    'box_name'  => 'hnakamur/centos6.5-x64',
 }
 
 CENT_OS_7 = {
@@ -17,7 +17,7 @@ CENT_OS_7 = {
     'tag_httpd' => 'apache24',
     'box_name'  => 'centos70',
     'box_url'   => 'https://f0fff3908f081cb6461b407be80daf97f07ac418.googledrive.com/host/0BwtuV7VyVTSkUG1PM3pCeDJ4dVE/centos7.box',
-    'selinux'   => true
+    'selinux'   => true,
 }
 
 
@@ -87,16 +87,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             ansible.host_key_checking = false
 
             # 実行tags
-            WEB_SERVER_TAGS = [WEB_SERVER_OS_TYPE['tag_os'], WEB_SERVER_OS_TYPE['tag_httpd']] + WEB_SERVER_PLAY_TAGS
+            web_server_tags = [WEB_SERVER_OS_TYPE['tag_os'], WEB_SERVER_OS_TYPE['tag_httpd']] + WEB_SERVER_PLAY_TAGS
             if WEB_SERVER_OS_TYPE.key?('selinux') then
-                WEB_SERVER_TAGS = WEB_SERVER_TAGS + ['SELinux']
+                web_server_tags = web_server_tags + ['SELinux']
             end
-            ansible.tags = WEB_SERVER_TAGS.join(',')
+            ansible.tags = web_server_tags.join(',')
 
             ansible.extra_vars = {
-                'servername' => WEB_SERVER_HOST_NAME,
-                'ip_address' => WEB_SERVER_IP_ADDRESS,
-                'doc_root'   => WEB_SERVER_DOC_ROOT
+                'servername'    => WEB_SERVER_HOST_NAME,
+                'ip_address'    => WEB_SERVER_IP_ADDRESS,
+                'db_servername' => DB_SERVER_HOST_NAME,
+                'db_ip_address' => DB_SERVER_IP_ADDRESS,
+                'doc_root'      => WEB_SERVER_DOC_ROOT
             }
 
             # debug用
@@ -131,15 +133,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             ansible.host_key_checking = false
 
             # 実行tags
-            DB_SERVER_TAGS = [DB_SERVER_OS_TYPE['tag_os'], DB_SERVER_OS_TYPE['tag_httpd']] + DB_SERVER_PLAY_TAGS
+            db_server_tags = [DB_SERVER_OS_TYPE['tag_os']] + DB_SERVER_PLAY_TAGS
             if DB_SERVER_OS_TYPE.key?('selinux') then
-                DB_SERVER_TAGS = DB_SERVER_TAGS + ['SELinux']
+                db_server_tags = db_server_tags + ['SELinux']
             end
-            ansible.tags = DB_SERVER_TAGS.join(',')
+            ansible.tags = db_server_tags.join(',')
 
             ansible.extra_vars = {
-                'servername' => DB_SERVER_HOST_NAME,
-                'ip_address' => DB_SERVER_IP_ADDRESS,
+                'servername'     => DB_SERVER_HOST_NAME,
+                'ip_address'     => DB_SERVER_IP_ADDRESS,
+                'web_servername' => WEB_SERVER_HOST_NAME,
+                'web_ip_address' => WEB_SERVER_IP_ADDRESS,
             }
 
             # debug用
