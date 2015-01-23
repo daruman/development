@@ -80,6 +80,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             # vagrantが自動生成するものを使用するのでインベントリファイルは指定しない
 
             ansible.groups = { "webservers" => ["webserver"] }
+            ansible.limit = 'webservers'
             ansible.playbook = 'ansible/site.yml'
 
             # hostOSの~/.ssh/known_hostsに書き込まない
@@ -123,6 +124,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             # vagrantが自動生成するものを使用するのでインベントリファイルは指定しない
 
             ansible.groups = { "dbservers" => ["dbserver"] }
+            ansible.limit = 'dbservers'
             ansible.playbook = 'ansible/site.yml'
 
             # hostOSの~/.ssh/known_hostsに書き込まない
