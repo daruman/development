@@ -7,6 +7,14 @@
   command: systemctl disable firewalld.service
   tags: CentOs7
 
+
+- name: iptables 停止確認
+  shell: getenforce
+  register: result
+  changed_when: false
+  tags: CentOs6
+
 - name: stop ip tables
   shell: service iptables stop
+  when: result|success and result.stdout != 'Disabled'
   tags: CentOs6

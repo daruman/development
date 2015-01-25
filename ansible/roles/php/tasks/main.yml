@@ -31,7 +31,15 @@
   get_url: url=http://getcomposer.org/installer dest=/tmp/composer_installer mode=0440
   tags: php56
 
+- name: composer install 確認
+  shell: composer
+  register: result
+  failed_when: "'command not found' in result.stderr"
+  changed_when: false
+  ignore_errors: true
+  tags: php56
+
 - name: install composer
   command: /usr/bin/php /tmp/composer_installer --install-dir=/usr/bin --filename=composer
-  notify: restart apache
+  when: result.rc != 0
   tags: php56
