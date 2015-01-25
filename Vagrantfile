@@ -81,7 +81,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
             ansible.groups = { "webservers" => ["webserver"] }
             ansible.limit = 'webservers'
-            ansible.playbook = 'ansible/site.yml'
+            ansible.playbook = 'ansible/start.yml'
 
             # hostOSの~/.ssh/known_hostsに書き込まない
             ansible.host_key_checking = false
@@ -127,7 +127,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
             ansible.groups = { "dbservers" => ["dbserver"] }
             ansible.limit = 'dbservers'
-            ansible.playbook = 'ansible/site.yml'
+            ansible.playbook = 'ansible/start.yml'
 
             # hostOSの~/.ssh/known_hostsに書き込まない
             ansible.host_key_checking = false
