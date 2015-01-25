@@ -5,6 +5,6 @@
     - group_vars/all
     - group_vars/dbservers
   roles:
-    # commonは依存先から呼ばれる
-    # - common
+    # coreは依存先から呼ばれる
+    # - core
     - mysql

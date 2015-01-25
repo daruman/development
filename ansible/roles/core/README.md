@@ -1,4 +1,4 @@
-common role
+core role
 =====
 
 主にOSに関する設定
