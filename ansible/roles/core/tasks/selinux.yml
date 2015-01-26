@@ -1,5 +1,12 @@
 ---
+- name: SELinux 停止確認
+  shell: getenforce
+  register: result
+  changed_when: false
+  tags: SELinux
+
 - name: disable SELinux
   selinux: state=disabled
+  when: result|success and result.stdout != 'Disabled'
   tags: SELinux
 
