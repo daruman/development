@@ -9,12 +9,15 @@
 
 
 - name: iptables 停止確認
-  shell: getenforce
+  shell: chkconfig --list iptables
   register: result
+  ignore_errors: true
   changed_when: false
+  always_run: yes
   tags: CentOs6
 
 - name: stop ip tables
-  shell: service iptables stop
-  when: result|success and result.stdout != 'Disabled'
+  service: name=iptables state=stopped enabled=false
+  when: result|success and result.stdout.find('on') != -1
   tags: CentOs6
+
