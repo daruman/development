@@ -32,14 +32,15 @@
   tags: php56
 
 - name: composer install 確認
-  shell: composer
+  shell: which composer
   register: result
-  failed_when: "'command not found' in result.stderr"
+  failed_when: result.rc not in [0, 1]
   changed_when: false
+  always_run: yes
   ignore_errors: true
   tags: php56
 
 - name: install composer
   command: /usr/bin/php /tmp/composer_installer --install-dir=/usr/bin --filename=composer
-  when: result.rc != 0
+  when: result.rc not in [0, 1]
   tags: php56
