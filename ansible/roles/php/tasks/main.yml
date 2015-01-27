@@ -32,15 +32,13 @@
   tags: php56
 
 - name: composer install 確認
-  shell: which composer
+  stat: path=/usr/bin/composer
   register: result
-  failed_when: result.rc not in [0, 1]
   changed_when: false
-  always_run: yes
   ignore_errors: true
   tags: php56
 
 - name: install composer
   command: /usr/bin/php /tmp/composer_installer --install-dir=/usr/bin --filename=composer
-  when: result.rc not in [0, 1]
+  when: result.stat.md5 is not defined
   tags: php56
