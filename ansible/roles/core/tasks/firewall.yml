@@ -1,12 +1,21 @@
 ---
-- name: stoped firewall
+# - name: firewall 停止確認
+  # shell: firewall-cmd --list-all
+  # register: result
+  # ignore_errors: true
+  # changed_when: false
+  # always_run: yes
+  # tags: CentOs7
+
+- name: stoped  firewall
   command: systemctl stop firewalld.service
+  # when: result|success and result.stdout.find('FirewallD is not running') == -1
   tags: CentOs7
 
 - name: disabled firewall
   command: systemctl disable firewalld.service
+  # when: result|success and result.stdout.find('FirewallD is not running') != -1
   tags: CentOs7
-
 
 - name: iptables 停止確認
   shell: chkconfig --list iptables
