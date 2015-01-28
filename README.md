@@ -106,55 +106,6 @@ webserver等含んでいる場合はブラウザからの表示確認、
 dbを含んでいる場合はlogin確認の他、hostOSからのアクセス確認もしておくとよさそう。
 
 
-BOX作成
-================================================================================
-
-通常は上記のフローで作成した開発環境を使用し、環境の変更があったら  
-管理者がansibleを更新し、利用者がpullして`vagrant destroy -f && vagrant up`とかすれば良いけど  
-開発中に環境をいじってみて、壊して戻すとかを頻繁にしたい場合  
-一度Provisioningした状態をbox登録しておくと毎回Provisioningが走らなくて楽。
-
-BOX作成事前準備
---------------------------------------------------------------------------------
-
-通常boxは非常に容量が大きいため、以下を行う事で作成するboxのサイズを小さくする。
-
-```
-$ vagrant ssh {boxを作成するサーバ}
-
-$ su -
-
-# yumの掃除
-$ yum clean all
-
-# フラグメンテーション解消
-$ dd if=/dev/zero of=/EMPTY bs=1M
-$ rm -f /EMPTY
-
-# logファイル初期化
-$find /var/log -type f | while read f; do echo -ne '' > $f; done
-
-# 不要な初期web root削除
-$ rm -rf /var/www/html #不要なデータ削除
-
-$ exit
-```
-
-BOX作成・登録
---------------------------------------------------------------------------------
-
-```
-# box作成(サーバーの数だけ)
-# vagrant package --base {virtualbox上でのサーバ名} --output {出力box名}
-# 例:
-$ vagrant package --base develop.local --output develop_webserver.box
-
-# box登録
-# vagrant box add {登録するbox名} ./{出力しておいたbox名}
-# 例
-$ vagrant box add develop_webserver ./develop_webserver.box
-```
-
 
 
 [1]: http://kashewnuts.bitbucket.org/2013/08/25/vagrantvbguest.html
