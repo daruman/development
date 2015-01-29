@@ -39,7 +39,7 @@ $ vagrant plugin install vagrant-vbguest
 --------------------------------------------------------------------------------
 
 ```
-sudo echo '192.168.30.10   develop.local' >> /path/hosts
+sudo echo '192.168.30.10   develop-env.local' >> /path/hosts
 ```
 
 2. cloneして起動
