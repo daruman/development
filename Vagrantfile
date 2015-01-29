@@ -24,6 +24,10 @@ CENT_OS_7 = {
 # ユーザー定義
 # ================================================================================
 
+# 作成されるvirtualboxのマシン名
+WEB_MACHINE_NAME = 'env_web_server'
+DB_MACHINE_NAME = 'env_db_server'
+
 # 下記はhostOSのhostsの設定と合わせる(ただしapacheを置かないdbサーバ等のhost名はdummyで良い)
 WEB_SERVER_IP_ADDRESS = "192.168.30.10"
 DB_SERVER_IP_ADDRESS = "192.168.30.11"
@@ -68,7 +72,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
         webserver.vm.provider :virtualbox do |v|
             # virtualboxのGUI上の名前変更
-            v.name = WEB_SERVER_HOST_NAME
+            v.name = WEB_MACHINE_NAME
 
             # 割り当てメモリ変更
             v.customize ["modifyvm", :id, "--memory", 1024]
@@ -114,7 +118,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
         dbserver.vm.provider :virtualbox do |v|
             # virtualboxのGUI上の名前変更
-            v.name = DB_SERVER_HOST_NAME
+            v.name = DB_MACHINE_NAME
 
             # 割り当てメモリ変更
             v.customize ["modifyvm", :id, "--memory", 1024]
