@@ -27,8 +27,8 @@ CENT_OS_7 = {
 # 下記はhostOSのhostsの設定と合わせる(ただしapacheを置かないdbサーバ等のhost名はdummyで良い)
 WEB_SERVER_IP_ADDRESS = "192.168.30.10"
 DB_SERVER_IP_ADDRESS = "192.168.30.11"
-WEB_SERVER_HOST_NAME  = "develop.local"
-DB_SERVER_HOST_NAME  = "develop-db.local"
+WEB_SERVER_HOST_NAME  = "develop-env.local"
+DB_SERVER_HOST_NAME  = "develop-env-db.local"
 
 # apacheのドキュメントルートになる
 WEB_SERVER_DOC_ROOT = "/vagrant/projectCode/webroot"
