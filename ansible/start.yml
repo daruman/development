@@ -1,5 +1,5 @@
 ---
 - include: webservers.yml
 - include: dbservers.yml
-# - include: toolserver.yml
+- include: toolserver.yml
 # - include: project.yml

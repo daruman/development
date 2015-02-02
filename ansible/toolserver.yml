@@ -1,0 +1,12 @@
+---
+- hosts: toolserver
+  sudo: true
+  vars_files:
+    - group_vars/all
+    - group_vars/toolservers
+  roles:
+    # core、rubyは依存先から呼ばれる
+    # - core
+    # - ruby
+    - frontend_devtool
+
