@@ -1,19 +1,35 @@
 ---
-- name: Installed mysql
-  yum: name=mysql-community-server enablerepo=mysql56-community state=present
-  tags: mysql56
+- include: mysqlrepo.yml
 
 # ansibleのmysql_db, mysql_userといったモジュールの依存
 - name: Install MySQL-python
   yum: name=MySQL-python state=latest
+  tags:
+    - mysql56
+    - mysql55
+
+- name: Installed mysql
+  yum: name=mysql-community-server enablerepo=mysql56-community state=present
   tags: mysql56
+
+- name: Installed mysql
+  yum: name=mysql enablerepo=remi state=present
+  tags: mysql55
+
+- name: Installed mysql server
+  yum: name=mysql-server enablerepo=remi state=present
+  tags: mysql55
 
 - name: Put my.cnf
   template: src=my.cnf.j2 dest=/etc/my.cnf
-  tags: mysql56
+  tags:
+    - mysql56
+    - mysql55
 
 - name: Start mysql
   service: name=mysqld state=started enabled=yes
-  tags: mysql56
+  tags:
+    - mysql56
+    - mysql55
 
 - include: testdb.yml

@@ -1,9 +1,14 @@
 ---
+# ファイルを転送するために必要(selinux無効反映タイミングの問題で必須)
+- name: selinux python
+  yum: name=libselinux-python state=installed
+  tags:
+    - CentOs7
+    - CentOs6
 - include: single-request-reopen.yml
 - include: firewall.yml
 - include: time.yml
 - include: epelrepo.yml
 - include: remirepo.yml
-- include: mysqlrepo.yml
 - include: selinux.yml
 - include: command.yml

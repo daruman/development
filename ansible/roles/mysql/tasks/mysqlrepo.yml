@@ -1,11 +1,8 @@
 ---
 - name: set yum repository for the mysql
   yum: name=http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
-  tags:
-    - CentOs7
+  tags: CentOs7
 
 - name: set yum repository for the mysql
   yum: name=http://repo.mysql.com/mysql-community-release-el6-5.noarch.rpm
-  tags: 'repo'
-  tags:
-    - CentOs6
+  tags: CentOs6

@@ -1,6 +1,8 @@
 - name: Create databases
   mysql_db: name={{ database.db }} state=present encoding=utf8
-  tags: mysql56
+  tags:
+    - mysql56
+    - mysql55
 
 - name: Create users
   mysql_user:
@@ -9,7 +11,9 @@
     host=localhost
     priv=*.*:ALL,GRANT
     state=present
-  tags: mysql56
+  tags:
+    - mysql56
+    - mysql55
 
 - name: 他サーバからのアクセス可能に
   mysql_user:
@@ -18,21 +22,28 @@
     host={{ web_ip_address }}
     priv=*.*:ALL,GRANT
     state=present
-  tags: mysql56
+  tags:
+    - mysql56
+    - mysql55
 
 - name: Put start query file
   template: src=start.sql.j2 dest=/tmp/start.sql
-  tags: mysql56
+  tags:
+    - mysql56
+    - mysql55
 
 - name: テスト用テーブルの存在確認
   shell: mysql -uroot {{ database.db }} -e"show tables"
   register: show_tables
   ignore_errors: true
   changed_when: false
-  tags: mysql56
+  tags:
+    - mysql56
+    - mysql55
 
 - name: テスト用テーブルが存在しないなら作成クエリ実行
   shell: mysql -uroot {{ database.db }} < /tmp/start.sql
   when: show_tables.stdout.find("{{ database.table }}") == -1
-  tags: mysql56
-
+  tags:
+    - mysql56
+    - mysql55
