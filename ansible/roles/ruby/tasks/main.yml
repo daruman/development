@@ -1,18 +1,73 @@
 ---
-- name: installed ruby
-  yum: name=ruby state=present
+- name: get currently installed ruby version
+  command: ruby -v
+  register: result
+  ignore_errors: true
+  changed_when: false
+  tags: ruby
+
+- name: Install ruby dependencies
+  yum: name={{ item }} state=present
+  with_items: ruby_dependencies
+  when: result.rc !=0 or result.stdout.split()[1] != ruby.version
+  tags: ruby
+
+- name: Download binary from ruby offical website
+  get_url: url={{ ruby.url }} dest={{ ruby.src_path }}
+  when: result.rc !=0 or result.stdout.split()[1] != ruby.version
+  tags: ruby
+
+- name: Uncompress ruby binary
+  command: tar -xf {{ ruby.file }} chdir={{ ruby.src_path }}
+  when: result.rc !=0 or result.stdout.split()[1] != ruby.version
+  tags: ruby
+
+# commandのクォートの位置に注意、全部囲んでやらないとinValid errorが出る
+- name: configure ruby and make and install
+  command: "{{ item.com }} chdir={{ ruby.src_path }}{{ ruby.dir }}"
+  with_items:
+    - { com: './configure'}
+    - { com: 'make'}
+    - { com: 'make install'}
+  when: result.rc !=0 or result.stdout.split()[1] != ruby.version
   tags: ruby
 
 - name: installed ruby modules
   yum: name={{ item }} state=present
   with_items:
-    - ruby-devel
     - rubygems
+    - ruby-devel
+  when: result.rc !=0 or result.stdout.split()[1] != ruby.version
   tags: ruby
 
-- name: installed gem
+- name: delete old ruby and gem
+  file: path=/usr/bin/{{ item }} state=absent
+  with_items:
+    - ruby
+    - gem
+  when: result.rc !=0 or result.stdout.split()[1] != ruby.version
+  tags: ruby
+
+- name: Make Ruby symlinks
+  file: path=/usr/bin/{{ item }} src=/usr/local/bin/{{ item }} state=link
+  with_items:
+    - ruby
+    - gem
+  when: result.rc !=0 or result.stdout.split()[1] != ruby.version
+  tags: ruby
+
+- name: installed gems
   gem: name={{ item }} state=present user_install=no
   with_items:
     - rake
+    - bundler
     - rb-inotify
+  when: result.rc !=0 or result.stdout.split()[1] != ruby.version
   tags: ruby
+
+
+# - name: Copy .gemrc to $HOME
+  # copy: src=gemrc
+        # dest={{ home }}/.gemrc
+        # backup=no
+  # tags: ruby

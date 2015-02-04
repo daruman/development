@@ -13,10 +13,36 @@ install_commands:
 - kernel-headers
 - dkms
 - gcc
+- git
 - gcc-c++
+- make
+- patch
+- readline
+- readline-devel
+- zlib-devel
+- openssl-devel
+- bzip2
+- autoconf
+- automake
+- libtool
+- bison
+- zlib
+- zlib-devel
+- curl-devel
+- gettext-devel
 
 # installするapacheモジュール
 install_apache_modules:
 - mod_ssl
 - openssh
 
+# rubyに関するパラメータ
+ruby_dependencies:
+- libffi-devel
+- libyaml-devel
+ruby:
+  version: 2.2.0
+  url: ftp://ftp.ruby-lang.org/pub/ruby/ruby-2.2.0.tar.gz
+  dir: ruby-2.2.0
+  file: ruby-2.2.0.tar.gz
+  src_path: /usr/local/src/
