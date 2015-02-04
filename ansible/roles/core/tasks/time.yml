@@ -1,6 +1,6 @@
 ---
 - name: timezone確認
-  shell: date +"%Z"
+  shell: awk -F\" '{ print $2}' /etc/sysconfig/clock
   register: result
   ignore_errors: true
   changed_when: false
@@ -10,8 +10,8 @@
     - CentOs6
 
 - name: change local time
-  copy: src=/usr/share/zoneinfo/Japan dest=/etc/localtime owner=vagrant
-  when: result|success and result.stdout != "JST"
+  copy: src=/usr/share/zoneinfo/Japan dest=/etc/localtime owner=vagrant force=yes
+  when: result.stdout != "JST"
   tags:
     - CentOs7
     - CentOs6
