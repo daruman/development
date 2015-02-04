@@ -11,14 +11,14 @@ VAGRANTFILE_API_VERSION = "2" if !defined? VAGRANTFILE_API_VERSION
 CENT_OS_6 = {
     'tag_os'    => 'CentOs6',
     'tag_httpd' => 'apache22',
-    'box_name'  => 'hnakamur/centos6.5-x64',
+    'box_name'  => 'opscode_centos-6.6',
+    'box_url'   => 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-6.6_chef-provisionerless.box',
 }
 CENT_OS_7 = {
     'tag_os'    => 'CentOs7',
     'tag_httpd' => 'apache24',
-    'box_name'  => 'centos70',
-    'box_url'   => 'https://f0fff3908f081cb6461b407be80daf97f07ac418.googledrive.com/host/0BwtuV7VyVTSkUG1PM3pCeDJ4dVE/centos7.box',
-    'selinux'   => true,
+    'box_name'  => 'opscode_centos-7.0',
+    'box_url'   => 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.0_chef-provisionerless.box',
 }
 
 
