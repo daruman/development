@@ -5,13 +5,23 @@
   ignore_errors: true
   changed_when: false
   always_run: yes
-  tags:
-    - CentOs7
-    - CentOs6
+  tags: CentOs6
+
+- name: timezone確認
+  shell: date +"%Z"
+  register: result
+  ignore_errors: true
+  changed_when: false
+  always_run: yes
+  tags: CentOs7
 
 - name: change local time
   copy: src=/usr/share/zoneinfo/Japan dest=/etc/localtime owner=vagrant force=yes
   when: result.stdout != "JST"
-  tags:
-    - CentOs7
-    - CentOs6
+  tags: CentOs6
+
+- name: change local time
+  command: timedatectl set-timezone Asia/Tokyo
+  when: result.stdout != "JST"
+  tags: CentOs7
+
