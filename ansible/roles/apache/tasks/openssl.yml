@@ -1,0 +1,27 @@
+---
+- name: Creating ssl key
+  command: openssl genrsa -out /etc/httpd/conf/server.key 2048
+  tags:
+    - apache24
+    - apache22
+
+- name: Creating ssl csr
+  command: openssl req -new -key /etc/httpd/conf/server.key -out /etc/httpd/conf/server.csr -subj '/C=JP/ST=Tokyo/CN={{ servername }}'
+  tags:
+    - apache24
+    - apache22
+
+- name: Creating self-signed server SSL crt
+  command: openssl x509 -in /etc/httpd/conf/server.csr -days 3650 -req -signkey /etc/httpd/conf/server.key -out /etc/httpd/conf/server.crt
+  tags:
+    - apache24
+    - apache22
+
+- name: ssl.conf設定
+  copy: src=ssl22.conf dest=/etc/httpd/conf.d/ssl.conf
+  tags: apache22
+
+- name: ssl.conf設定
+  copy: src=ssl24.conf dest=/etc/httpd/conf.d/ssl.conf
+  tags: apache24
+

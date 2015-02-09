@@ -28,10 +28,10 @@
   template: src=vhosts22.conf.j2 dest=/etc/httpd/conf.d/vhosts.conf
   tags: apache22
 
-- name: be sure httpd is running and enabled
-  service: name=httpd state=running enabled=yes
-  tags: apache24
+- include: openssl.yml
 
 - name: be sure httpd is running and enabled
   service: name=httpd state=started enabled=yes
-  tags: apache22
+  tags:
+    - apache24
+    - apache22

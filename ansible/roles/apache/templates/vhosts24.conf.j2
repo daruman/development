@@ -9,6 +9,34 @@
     ServerName {{ servername }}
     ErrorLog logs/{{ servername }}-error_log
     CustomLog logs/{{ servername }}-access_log common
+    LogLevel warn
+    <Directory {{ doc_root }}>
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+
+# https接続用設定
+<VirtualHost *:443>
+    ServerAdmin webmaster@{{ servername }}
+    DocumentRoot {{ doc_root }}
+    ServerName {{ servername }}
+    ErrorLog logs/{{ servername }}-error_log
+    CustomLog logs/{{ servername }}-access_log common
+    LogLevel warn
+
+    SSLEngine on
+
+    SSLProtocol all -SSLv2
+
+    SSLCipherSuite HIGH:MEDIUM:!aNULL:!MD5
+
+    SSLCertificateFile /etc/httpd/conf/server.crt
+
+    SSLCertificateKeyFile /etc/httpd/conf/server.key
+
+    SSLOptions +FakeBasicAuth +ExportCertData +StrictRequire
+
     <Directory {{ doc_root }}>
         AllowOverride All
         Require all granted
