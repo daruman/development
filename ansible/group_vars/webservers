@@ -16,7 +16,6 @@ php_packages:
 - php-fpm
 - php-opcache
 - php-mcrypt
-- php-phpunit-PHPUnit
 - php-pecl-xdebug
 - php-xml
 - php-posix
