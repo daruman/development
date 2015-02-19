@@ -8,7 +8,7 @@
 
 - name: install composer
   shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin
-  when: composer_stat.stat.exists
+  when: composer_stat.stat.exists == false
   tags: php56
 
 - name: stat composer.phar
