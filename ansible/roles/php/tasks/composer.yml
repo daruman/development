@@ -1,4 +1,4 @@
-- name: stat composer install
+- name: stat composer
   stat: path=/usr/bin/composer
   register: composer_stat
   changed_when: false
@@ -34,7 +34,7 @@
   when: composer_stat.stat.exists
   tags: php56
 
-
+# @todo 既に処理済みじゃないかチェック入れる
 - name: installed composer module
   command: composer global require {{ item }}
   sudo: no

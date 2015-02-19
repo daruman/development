@@ -34,7 +34,7 @@
   ignore_errors: true
   tags: php56
 
-- name: change session dir permision
+- name: change session dir permission
   file: path=/var/lib/php/session mode=0755
   when: session_stat.stat.exists
   tags: php56
