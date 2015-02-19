@@ -19,3 +19,6 @@ php_packages:
 - php-pecl-xdebug
 - php-xml
 - php-posix
+
+composer_package:
+- phpunit/phpunit

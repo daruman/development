@@ -1,0 +1,38 @@
+# @todo php55での動作確認
+- name: install memcached
+  yum: name={{ item }} state=present
+  with_items:
+    - memcached
+    - memcached-devel
+  tags: php56
+
+- name: install memcached module
+  yum: name=php-pecl-memcached enablerepo=remi,remi-php56 state=present
+  tags: php56
+
+- name: check chkconfig memcached
+  shell: /sbin/chkconfig --list | grep memcached
+  ignore_errors: true
+  register: addedd_memcached
+  changed_when: false
+  tags: php56
+
+- name: memcached add to chkconfig
+  shell: /sbin/chkconfig memcached on
+  when: addedd_memcached.rc == 1
+  tags: php56
+
+# @todo これまじであってる？
+- name: check service memcached
+  shell: service memcached status
+  ignore_errors: true
+  register: started_memcached
+  changed_when: false
+  tags: php56
+
+- name: start memcached
+  service: name=memcached state=started
+  when: started_memcached.rc == 1
+  tags: php56
+
+

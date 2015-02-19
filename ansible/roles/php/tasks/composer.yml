@@ -1,0 +1,44 @@
+# @todo php55の動作確認
+- name: stat composer install
+  stat: path=/usr/bin/composer
+  register: composer_stat
+  changed_when: false
+  ignore_errors: true
+  tags: php56
+
+- name: install composer
+  shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin
+  when: composer_stat.stat.exists
+  tags: php56
+
+- name: stat composer.phar
+  stat: path=/usr/bin/composer.phar
+  register: phar_stat
+  changed_when: false
+  ignore_errors: true
+  tags: php56
+
+- name: Move composer.phar to composer
+  command: mv /usr/bin/composer.phar /usr/bin/composer
+  when: phar_stat.stat.exists
+  tags: php56
+
+- name: re-stat composer install
+  stat: path=/usr/bin/composer
+  register: composer_stat
+  changed_when: false
+  ignore_errors: true
+  tags: php56
+
+- name: set composer PATH to /etc/profile
+  lineinfile: dest=/etc/profile line="export PATH=$HOME/.composer/vendor/bin:$PATH"
+  when: composer_stat.stat.exists
+  tags: php56
+
+
+- name: installed composer module
+  command: composer global require {{ item }}
+  sudo: no
+  with_items: composer_package
+  when: composer_stat.stat.exists
+  tags: php56

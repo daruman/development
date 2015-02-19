@@ -27,51 +27,5 @@
   copy: src=php.ini dest=/etc/php.ini
   tags: php56
 
-- name: download composer
-  get_url: url=http://getcomposer.org/installer dest=/tmp/composer_installer mode=0440
-  tags: php56
-
-- name: composer install 確認
-  stat: path=/usr/bin/composer
-  register: result
-  changed_when: false
-  ignore_errors: true
-  tags: php56
-
-- name: install composer
-  command: /usr/bin/php /tmp/composer_installer --install-dir=/usr/bin --filename=composer
-  when: result.stat.md5 is not defined
-  tags: php56
-
-# @todo php55での動作確認
-- name: install memcached
-  yum: name={{ item }} state=present
-  with_items:
-    - memcached-devel
-    - php-pecl-memcache
-  tags: php56
-
-- name: check chkconfig memcached
-  shell: /sbin/chkconfig --list | grep memcached
-  ignore_errors: true
-  register: addedd_memcached
-  changed_when: false
-  tags: php56
-
-- name: memcached add to chkconfig
-  shell: /sbin/chkconfig memcached on
-  when: addedd_memcached.rc == 1
-  tags: php56
-
-- name: check service memcached
-  shell: service memcached status
-  ignore_errors: true
-  register: started_memcached
-  changed_when: false
-  tags: php56
-
-- name: start memcached
-  service: name=memcached state=started
-  when: started_memcached.rc == 1
-  tags: php56
-
+- include: memcache.yml
+- include: composer.yml
