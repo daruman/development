@@ -1,4 +1,3 @@
-# @todo php55の動作確認
 - name: stat composer install
   stat: path=/usr/bin/composer
   register: composer_stat
