@@ -7,6 +7,9 @@ timezone: Asia/Tokyo
 
 # サーバーにインストールするコマンド
 install_commands:
+- "@base"
+- "@network-tools"
+- "@development"
 - tree
 - jq
 - kernel-devel
@@ -28,8 +31,9 @@ install_commands:
 - bison
 - zlib
 - zlib-devel
-- curl-devel
 - gettext-devel
+- inotify-tools
+- telnet
 
 # installするapacheモジュール
 install_apache_modules:
