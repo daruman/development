@@ -27,5 +27,17 @@
   copy: src=php.ini dest=/etc/php.ini
   tags: php56
 
+- name: stat session dir
+  stat: path=/var/lib/php/session
+  register: session_stat
+  changed_when: false
+  ignore_errors: true
+  tags: php56
+
+- name: change session dir permision
+  file: path=/var/lib/php/session mode=0755
+  when: session_stat.stat.exists
+  tags: php56
+
 - include: memcache.yml
 - include: composer.yml
