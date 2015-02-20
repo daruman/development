@@ -8,10 +8,8 @@
     DocumentRoot {{ doc_root }}
     ServerName {{ servername }}
     ErrorLog logs/{{ servername }}-error_log
-    CustomLog logs/{{ servername }}-access_log common
+    CustomLog logs/{{ servername }}-access_log combined
     LogLevel warn
-    LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
-    LogFormat "%h %l %u %t \"%r\" %>s %b" common
     <Directory {{ doc_root }}>
         AllowOverride All
         Order allow,deny
@@ -25,10 +23,8 @@
     DocumentRoot {{ doc_root }}
     ServerName {{ servername }}
     ErrorLog logs/{{ servername }}-error_log
-    CustomLog logs/{{ servername }}-access_log common
+    CustomLog logs/{{ servername }}-access_log combined
     LogLevel warn
-    LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
-    LogFormat "%h %l %u %t \"%r\" %>s %b" common
 
     SSLEngine on
 
