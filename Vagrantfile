@@ -1,5 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+require "json"
 
 # 定義
 # ================================================================================
@@ -20,6 +21,12 @@ CENT_OS_7 = {
     'box_name'  => 'opscode_centos-7.0',
     'box_url'   => 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.0_chef-provisionerless.box',
 }
+
+# windows判別
+IS_WINDOWS = false
+if RUBY_PLATFORM.downcase =~ /mswin(?!ce)|mingw|cygwin|bccwin/
+    IS_WINDOWS = true
+end
 
 
 # Configuration
