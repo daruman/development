@@ -145,6 +145,7 @@ def provisionByAnsible(server, host, server_config, extra_vars, tags, playbook)
         ansible.host_key_checking = false
 
         ansible.tags = tags.join(',')
+        extra_vars['already_yum_update'] = false
         ansible.extra_vars = extra_vars
 
         # debug用
@@ -159,6 +160,9 @@ end
 #
 def provisionByShell(server, host, server_config, extra_vars, tags, playbook)
     server.vm.provision "shell" do |shell|
+        # shellによるProvisioningでyum updateするのでフラグを立てる
+        extra_vars['already_yum_update'] = true
+
         limit = server_config['inventory_group']
         args = [
             limit,

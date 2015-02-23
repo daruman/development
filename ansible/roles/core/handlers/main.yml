@@ -1,3 +1,4 @@
 ---
 - name: yum update
   command: yum -y update
+  when: not already_yum_update
