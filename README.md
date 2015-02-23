@@ -16,6 +16,9 @@ ansibleに関しては主にこれをベースに構成
 - vagrant
 - ansible
 
+ただしwindowsはansibleが動かないので、shellさえ動けば良い  
+
+
 Vagrantにplugin追加
 --------------------------------------------------------------------------------
 
@@ -38,6 +41,7 @@ $ vagrant plugin install vagrant-vbguest
 1. hostsに追加
 --------------------------------------------------------------------------------
 
+__使用済みIPとぶつからないように適時変更__
 ```
 sudo echo '192.168.30.10   develop-env.local' >> /path/hosts
 ```
@@ -45,18 +49,16 @@ sudo echo '192.168.30.10   develop-env.local' >> /path/hosts
 2. cloneして起動
 --------------------------------------------------------------------------------
 
-__初回は凄く時間がかかる、環境次第だけど10分以上はかかりそう__
+__初回は凄く時間がかかる、環境次第だけど10分以上はかかりそう__  
+__hostsで使用するIPを変更した場合はVagrantFileも該当箇所修正__  
 
 ```
 # 適当な箇所にclone
 $ git clone git@github.com:daruman/development.git development_env
 $ cd $_
 
-# 起動+プロビジョニング
-$ vagrant up
-
-# SELinux設定変更を含む場合、up後にreloadする(対応されていないboxを使用する場合)
-# $ vagrant reload
+# 起動+プロビジョニング+リロード(一応リロードしておく)
+$ vagrant up && vagrant reload
 ```
 
 
@@ -69,7 +71,7 @@ $ vagrant up
 ソース取得
 --------------------------------------------------------------------------------
 
-普通にcloneするとこのRepositoryの管理下になるので
+普通にcloneするとこのRepositoryの管理下になるので  
 ダウンロードする、もしくは別のディレクトリに一旦cloneし
 ```
 $ git archive HEAD --worktree-attributes -o archive.tgz
@@ -85,7 +87,8 @@ $ git archive HEAD --worktree-attributes -o archive.tgz
 
 ### Vagrantfile
 
-ユーザー定義箇所を中心に必要に応じて
+ユーザー定義箇所を中心に必要に応じて  
+主にipやhost名、使用tagの変更を行う事が多そう。
 
 ### playbook
 
@@ -104,12 +107,13 @@ $ git archive HEAD --worktree-attributes -o archive.tgz
 
 既存のrole等を参考にすれば多分だいじょうぶ
 
+
 設定実装中の動作確認
 --------------------------------------------------------------------------------
 
 プロビジョニング中のエラー修正後や、既にVMが起動している場合、  
 以下の手順でプロビジョニングを再開する。  
-(destroy + upするのはキリの良いタイミングでの確認のみで良い)
+(destroy + upするのはpush前の確認のみで良い)
 ```
 $ vagrant reload {対象サーバー名} # 必須
 $ vagrant provision {対象サーバー名}
