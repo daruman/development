@@ -29,188 +29,145 @@ if RUBY_PLATFORM.downcase =~ /mswin(?!ce)|mingw|cygwin|bccwin/
 end
 
 
+
 # Configuration
 # ================================================================================
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # ユーザー定義
     # --------------------------------------------------------------------------------
+    server_configs = {
+        'webserver' => {
+            'inventory_group' => 'webservers',
+            # 作成されるvirtualboxのマシン名
+            'machine_name'    => 'env_web_server',
+            # 下記はhostOSのhostsの設定と合わせる
+            # (ただしapacheを置かないdbサーバ等のhost名はdummyで良い)
+            'ip_address'      => '192.168.30.10',
+            'host_name'       => 'develop-env.local',
+            # apacheのドキュメントルートになる
+            'doc_root'        => '/vagrant/projectCode/webroot',
+            # 使用するOS設定
+            'os_setting'      => CENT_OS_6,
+            # 使用するansible tags(OSとhttpdは自動設定)
+            # $WEB_SERVER_PLAY_TAGS = ['php56', 'web_project']
+            # $DB_SERVER_PLAY_TAGS = ['mysql56', 'db_project']
+            'ansible_tags'    => ['php56'],
+        },
+        'dbserver' =>{
+            'inventory_group' => 'dbservers',
+            'machine_name' => 'env_db_server',
+            'ip_address'   => '192.168.30.11',
+            'host_name'    => 'develop-env-db.local',
+            'os_setting'   => CENT_OS_6,
+            'ansible_tags' => ['mysql56'],
+        },
+        'toolserver' => {
+            'inventory_group' => 'toolservers',
+            'machine_name' => 'env_tool_server',
+            'ip_address'   => '192.168.30.12',
+            'host_name'    => 'develop-env-tool.local',
+            'os_setting'   => CENT_OS_6,
+            'ansible_tags' => ['frontend_devtool', 'ruby'],
+        },
+    }
 
-    # 作成されるvirtualboxのマシン名
-    $WEB_MACHINE_NAME  = 'env_web_server'
-    $DB_MACHINE_NAME   = 'env_db_server'
-    $TOOL_MACHINE_NAME = 'env_tool_server'
-
-    # 下記はhostOSのhostsの設定と合わせる(ただしapacheを置かないdbサーバ等のhost名はdummyで良い)
-    $WEB_SERVER_IP_ADDRESS  = "192.168.30.10"
-    $DB_SERVER_IP_ADDRESS   = "192.168.30.11"
-    $TOOL_SERVER_IP_ADDRESS = "192.168.30.12"
-    $WEB_SERVER_HOST_NAME   = "develop-env.local"
-    $DB_SERVER_HOST_NAME    = "develop-env-db.local"
-    $TOOL_SERVER_HOST_NAME  = "develop-tool.local"
-
-    # apacheのドキュメントルートになる
-    $WEB_SERVER_DOC_ROOT = "/vagrant/projectCode/webroot"
-
-    # 使用するOS設定
-    $WEB_SERVER_OS_TYPE  = CENT_OS_6
-    $DB_SERVER_OS_TYPE   = CENT_OS_6
-    $TOOL_SERVER_OS_TYPE = CENT_OS_6
-
-    # 使用するansible tags(OSとhttpdは自動設定)
-    # $WEB_SERVER_PLAY_TAGS = ['php56', 'web_project']
-    # $DB_SERVER_PLAY_TAGS = ['mysql56', 'db_project']
-    $WEB_SERVER_PLAY_TAGS  = ['php56']
-    $DB_SERVER_PLAY_TAGS   = ['mysql56']
-    $TOOL_SERVER_PLAY_TAGS = ['frontend_devtool', 'ruby']
-
-
-
-
-    # box
-    # --------------------------------------------------------------------------------
-    # (全てのサーバのOSが同じなら)どれでも良いのでwebの設定を使用
-    config.vm.box = $WEB_SERVER_OS_TYPE['box_name']
-    if $WEB_SERVER_OS_TYPE.key?('box_url') then
-        config.vm.box_url = $WEB_SERVER_OS_TYPE['box_url']
-    end
-
-
-    # server
-    # --------------------------------------------------------------------------------
-    # 建てるサーバが1つでも、以下のdefineがないと自動生成されるvagrant_ansible_inventoryに
-    # 出力されるサーバ設定用変数名が`default`になってしまう
-
-    # webserver
-    config.vm.define "webserver" do |webserver|
-        webserver.vm.hostname = $WEB_SERVER_HOST_NAME
-        webserver.vm.network :private_network, ip: $WEB_SERVER_IP_ADDRESS
-        webserver.ssh.forward_agent = true
-
-        webserver.vm.provider :virtualbox do |v|
-            # virtualboxのGUI上の名前変更
-            v.name = $WEB_MACHINE_NAME
-
-            # 割り当てメモリ変更
-            v.customize ["modifyvm", :id, "--memory", 1024]
+    server_configs.each do |host, server_config|
+        config.vm.box = server_config['os_setting']['box_name']
+        if server_config['os_setting'].key?('box_url') then
+            config.vm.box = server_config['os_setting']['box_url']
         end
 
-        # provision
-        # --------------------------------------------------------------------------------
-        webserver.vm.provision "ansible" do |ansible|
-            # vagrantが自動生成するものを使用するのでインベントリファイルは指定しない
+        # ansibleに渡す値
+        extra_vars = {
+            'servername' => server_config['host_name'],
+            'ip_address' => server_config['ip_address'],
+            'doc_root'   => server_config['doc_root'],
+        }
+        if host == 'webserver' then
+            extra_vars['db_servername'] = server_configs['dbserver']['host_name']
+            extra_vars['db_ip_address'] = server_configs['dbserver']['ip_address']
+        elsif host == 'dbserver' then
+            extra_vars['web_servername'] = server_configs['webserver']['host_name']
+            extra_vars['web_ip_address'] = server_configs['webserver']['ip_address']
+        end
 
-            ansible.groups = { "webservers" => ["webserver"] }
-            ansible.limit = 'webservers'
-            ansible.playbook = 'ansible/start.yml'
+        # 実行tags
+        os_setting = server_config['os_setting']
+        tags = [os_setting['tag_os'], os_setting['tag_httpd']] + server_config['ansible_tags']
+        if os_setting.key?('selinux') then
+            tags = tags + ['SELinux']
+        end
 
-            # hostOSの~/.ssh/known_hostsに書き込まない
-            ansible.host_key_checking = false
+        config.vm.define host do |server|
+            server.vm.hostname = server_config['host_name']
+            server.vm.network :private_network, ip: server_config['ip_address']
+            server.ssh.forward_agent = true
 
-            # 実行tags
-            web_server_tags = [$WEB_SERVER_OS_TYPE['tag_os'], $WEB_SERVER_OS_TYPE['tag_httpd']] + $WEB_SERVER_PLAY_TAGS
-            if $WEB_SERVER_OS_TYPE.key?('selinux') then
-                web_server_tags = web_server_tags + ['SELinux']
+            server.vm.provider :virtualbox do |v|
+                # virtualboxのGUI上の名前変更
+                v.name = server_config['machine_name']
+
+                # 割り当てメモリ変更
+                v.customize ["modifyvm", :id, "--memory", 1024]
             end
-            ansible.tags = web_server_tags.join(',')
 
-            ansible.extra_vars = {
-                'servername'    => $WEB_SERVER_HOST_NAME,
-                'ip_address'    => $WEB_SERVER_IP_ADDRESS,
-                'db_servername' => $DB_SERVER_HOST_NAME,
-                'db_ip_address' => $DB_SERVER_IP_ADDRESS,
-                'doc_root'      => $WEB_SERVER_DOC_ROOT
-            }
-
-            # debug用
-            # ansible.verbose =  'vvvv'
-        end
-    end
-
-    # db server
-    config.vm.define "dbserver" do |dbserver|
-        dbserver.vm.hostname = $DB_SERVER_HOST_NAME
-        dbserver.vm.network :private_network, ip: $DB_SERVER_IP_ADDRESS
-        dbserver.ssh.forward_agent = true
-
-        dbserver.vm.provider :virtualbox do |v|
-            # virtualboxのGUI上の名前変更
-            v.name = $DB_MACHINE_NAME
-
-            # 割り当てメモリ変更
-            v.customize ["modifyvm", :id, "--memory", 1024]
-        end
-
-        # provision
-        # --------------------------------------------------------------------------------
-        dbserver.vm.provision "ansible" do |ansible|
-            # vagrantが自動生成するものを使用するのでインベントリファイルは指定しない
-
-            ansible.groups = { "dbservers" => ["dbserver"] }
-            ansible.limit = 'dbservers'
-            ansible.playbook = 'ansible/start.yml'
-
-            # hostOSの~/.ssh/known_hostsに書き込まない
-            ansible.host_key_checking = false
-
-            # 実行tags
-            db_server_tags = [$DB_SERVER_OS_TYPE['tag_os']] + $DB_SERVER_PLAY_TAGS
-            if $DB_SERVER_OS_TYPE.key?('selinux') then
-                db_server_tags = db_server_tags + ['SELinux']
+            if IS_WINDOWS then
+                provisionByShell(server, host, server_config, extra_vars, tags)
+            else
+                provisionByAnsible(server, host, server_config, extra_vars, tags)
             end
-            ansible.tags = db_server_tags.join(',')
-
-            ansible.extra_vars = {
-                'servername'     => $DB_SERVER_HOST_NAME,
-                'ip_address'     => $DB_SERVER_IP_ADDRESS,
-                'web_servername' => $WEB_SERVER_HOST_NAME,
-                'web_ip_address' => $WEB_SERVER_IP_ADDRESS,
-            }
-
-            # debug用
-            # ansible.verbose =  'vvvv'
         end
+
     end
+end
 
-    # toolserver
-    config.vm.define "toolserver" do |toolserver|
-        toolserver.vm.hostname = $TOOL_SERVER_HOST_NAME
-        toolserver.vm.network :private_network, ip: $TOOL_SERVER_IP_ADDRESS
-        toolserver.ssh.forward_agent = true
 
-        toolserver.vm.provider :virtualbox do |v|
-            # virtualboxのGUI上の名前変更
-            v.name = $TOOL_MACHINE_NAME
 
-            # 割り当てメモリ変更
-            v.customize ["modifyvm", :id, "--memory", 1024]
-        end
 
-        # provision
-        # --------------------------------------------------------------------------------
-        toolserver.vm.provision "ansible" do |ansible|
-            # vagrantが自動生成するものを使用するのでインベントリファイルは指定しない
 
-            ansible.limit = 'toolserver'
-            ansible.playbook = 'ansible/start.yml'
+#
+# ansibleによるProvisioning
+#
+def provisionByAnsible(server, host, server_config, extra_vars, tags)
+    server.vm.provision "ansible" do |ansible|
+        # vagrantが自動生成するものを使用するのでインベントリファイルは指定しない
 
-            # hostOSの~/.ssh/known_hostsに書き込まない
-            ansible.host_key_checking = false
+        ansible.groups = { server_config['inventory_group'] => host }
+        ansible.limit = server_config['inventory_group']
+        ansible.playbook = 'ansible/start.yml'
 
-            # 実行tags
-            tool_server_tags = [$TOOL_SERVER_OS_TYPE['tag_os']] + $TOOL_SERVER_PLAY_TAGS
-            if $TOOL_SERVER_OS_TYPE.key?('selinux') then
-                tool_server_tags = tool_server_tags + ['SELinux']
-            end
-            ansible.tags = tool_server_tags.join(',')
+        # hostOSの~/.ssh/known_hostsに書き込まない
+        ansible.host_key_checking = false
 
-            ansible.extra_vars = {
-                'servername'    => $TOOL_SERVER_HOST_NAME,
-                'ip_address'    => $TOOL_SERVER_IP_ADDRESS,
-            }
+        ansible.tags = tags.join(',')
+        ansible.extra_vars = extra_vars
 
-            # debug用
-            # ansible.verbose =  'vvvv'
-        end
+        # debug用
+        # ansible.verbose =  'vvvv'
+    end
+end
+
+
+#
+# shellによるProvisioning
+# windows用
+#
+def provisionByShell(server, host, server_config, extra_vars, tags)
+    server.vm.provision "shell" do |shell|
+        $limit = server_config['inventory_group']
+        extra_vars_str = extra_vars.to_json
+
+        $tags = tags.join(',')
+        $playbook = 'ansible/start.yml'
+
+        $args  = ''
+        $args += "'" + '--limit=' + $limit + ' ' + "'"
+        $args += "'" + '--tags=' + $tags + ' ' + "'"
+        $args += "'" + '--extra-vars=' + extra_vars_str + ' ' + "'"
+        $args += "'" + '/vagrant/' + $playbook + "'"
+
+        shell.path = 'provision.sh'
+        shell.args = $args
     end
 end
