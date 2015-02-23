@@ -14,9 +14,7 @@ ansibleに関しては主にこれをベースに構成
 
 - virtualbox
 - vagrant
-- ansible
-
-ただしwindowsはansibleが動かないので、shellさえ動けば良い  
+- ansible (windowsは動かないので不要)
 
 
 Vagrantにplugin追加
@@ -60,6 +58,9 @@ $ cd $_
 # 起動+プロビジョニング+リロード(一応リロードしておく)
 $ vagrant up && vagrant reload
 ```
+
+windowsの場合、vm起動 -> vm上でshellでansibleインストール -> ansible実行なので  
+コンソールへの出力がansible実行段階で停止…一気に出力、となるので気長に待つ
 
 
 これをひな形として開発環境を作る

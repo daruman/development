@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 require "json"
 
-# 定義
+# 定数
 # ================================================================================
 
 # 変更しない
@@ -35,40 +35,44 @@ end
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # ユーザー定義
+    #
+    # | inventory_group |
+    # | machine_name    | 作成されるvirtualboxのマシン名
+    # | ip_address      | hostOSのhostsの設定と合わせる(apacheを置かないdbサーバ等のhost名はdummyで良い)
+    # | host_name       | apacheのドキュメントルートになる
+    # | os_setting      | 使用するOS設定(定数参照)
+    # | ansible_tags    | 使用するansible tags(OSとhttpdは自動設定)[etc. php56,web_project,mysql56,db_project]
+    # | playbook        | 基本変更する必要無し
+    #
     # --------------------------------------------------------------------------------
     server_configs = {
         'webserver' => {
             'inventory_group' => 'webservers',
-            # 作成されるvirtualboxのマシン名
             'machine_name'    => 'env_web_server',
-            # 下記はhostOSのhostsの設定と合わせる
-            # (ただしapacheを置かないdbサーバ等のhost名はdummyで良い)
             'ip_address'      => '192.168.30.10',
             'host_name'       => 'develop-env.local',
-            # apacheのドキュメントルートになる
             'doc_root'        => '/vagrant/projectCode/webroot',
-            # 使用するOS設定
             'os_setting'      => CENT_OS_6,
-            # 使用するansible tags(OSとhttpdは自動設定)
-            # $WEB_SERVER_PLAY_TAGS = ['php56', 'web_project']
-            # $DB_SERVER_PLAY_TAGS = ['mysql56', 'db_project']
             'ansible_tags'    => ['php56'],
+            'playbook'        => 'ansible/start.yml',
         },
         'dbserver' =>{
             'inventory_group' => 'dbservers',
-            'machine_name' => 'env_db_server',
-            'ip_address'   => '192.168.30.11',
-            'host_name'    => 'develop-env-db.local',
-            'os_setting'   => CENT_OS_6,
-            'ansible_tags' => ['mysql56'],
+            'machine_name'    => 'env_db_server',
+            'ip_address'      => '192.168.30.11',
+            'host_name'       => 'develop-env-db.local',
+            'os_setting'      => CENT_OS_6,
+            'ansible_tags'    => ['mysql56'],
+            'playbook'        => 'ansible/start.yml',
         },
         'toolserver' => {
             'inventory_group' => 'toolservers',
-            'machine_name' => 'env_tool_server',
-            'ip_address'   => '192.168.30.12',
-            'host_name'    => 'develop-env-tool.local',
-            'os_setting'   => CENT_OS_6,
-            'ansible_tags' => ['frontend_devtool', 'ruby'],
+            'machine_name'    => 'env_tool_server',
+            'ip_address'      => '192.168.30.12',
+            'host_name'       => 'develop-env-tool.local',
+            'os_setting'      => CENT_OS_6,
+            'ansible_tags'    => ['frontend_devtool', 'ruby'],
+            'playbook'        => 'ansible/start.yml',
         },
     }
 
@@ -113,9 +117,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             end
 
             if IS_WINDOWS then
-                provisionByShell(server, host, server_config, extra_vars, tags)
+                provisionByShell(server, host, server_config, extra_vars, tags, server_config['playbook'])
             else
-                provisionByAnsible(server, host, server_config, extra_vars, tags)
+                provisionByAnsible(server, host, server_config, extra_vars, tags, server_config['playbook'])
             end
         end
 
@@ -129,13 +133,13 @@ end
 #
 # ansibleによるProvisioning
 #
-def provisionByAnsible(server, host, server_config, extra_vars, tags)
+def provisionByAnsible(server, host, server_config, extra_vars, tags, playbook)
     server.vm.provision "ansible" do |ansible|
         # vagrantが自動生成するものを使用するのでインベントリファイルは指定しない
 
         ansible.groups = { server_config['inventory_group'] => host }
         ansible.limit = server_config['inventory_group']
-        ansible.playbook = 'ansible/start.yml'
+        ansible.playbook = playbook
 
         # hostOSの~/.ssh/known_hostsに書き込まない
         ansible.host_key_checking = false
@@ -153,21 +157,18 @@ end
 # shellによるProvisioning
 # windows用
 #
-def provisionByShell(server, host, server_config, extra_vars, tags)
+def provisionByShell(server, host, server_config, extra_vars, tags, playbook)
     server.vm.provision "shell" do |shell|
-        $limit = server_config['inventory_group']
-        extra_vars_str = extra_vars.to_json
+        limit = server_config['inventory_group']
+        args = [
+            limit,
+            '--limit=' + limit,
+            '--tags=' + tags.join(','),
+            '--extra-vars=' + extra_vars.to_json,
+            '/vagrant/' + playbook
+        ]
 
-        $tags = tags.join(',')
-        $playbook = 'ansible/start.yml'
-
-        $args  = ''
-        $args += "'" + '--limit=' + $limit + ' ' + "'"
-        $args += "'" + '--tags=' + $tags + ' ' + "'"
-        $args += "'" + '--extra-vars=' + extra_vars_str + ' ' + "'"
-        $args += "'" + '/vagrant/' + $playbook + "'"
-
+        shell.args = args
         shell.path = 'provision.sh'
-        shell.args = $args
     end
 end
