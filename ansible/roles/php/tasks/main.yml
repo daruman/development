@@ -39,6 +39,15 @@
   when: session_stat.stat.exists
   tags: php56
 
+- name: put test connectivity database server script
+  template: src=TestConnectivity.php.j2 dest=/usr/local/bin/test_connectivity
+  tags: php56
+
+- name: change database server script permission
+  file: path=/usr/local/bin/test_connectivity mode=0755
+  tags: php56
+
+
 - include: memcache.yml
 - include: composer.yml
 - include: xdebug.yml
