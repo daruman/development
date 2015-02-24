@@ -4,6 +4,7 @@
   vars_files:
     - group_vars/all
     - group_vars/webservers
+    - group_vars/dbservers
   roles:
     # coreは依存先から呼ばれる
     # - core

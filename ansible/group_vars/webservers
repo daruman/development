@@ -23,3 +23,5 @@ php_packages:
 composer_package:
 - phpunit/phpunit
 - phpunit/dbunit
+
+xdebug_logfile_path: /tmp/xdebug_remote_log

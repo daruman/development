@@ -12,4 +12,9 @@
   when: phpconf_stat.stat.exists
   tags: php56
 
+# 自動生成されるlogファイルは所有者がrootなので先にvagrant userでファイルを生成しておく
+- name: make logfile
+  file: path={{ xdebug_logfile_path }} state=touch owner=vagrant
+  tags: php56
+
 
