@@ -1834,3 +1834,19 @@ ldap.max_links = -1
 ; Local Variables:
 ; tab-width: 4
 ; End:
+
+
+
+
+; xdebug用設定
+{% if env == 'local' %}
+    zend_extension=xdebug.so
+    xdebug.profiler_output_dir = "/tmp/xdebug/"
+    xdebug.profiler_enable = On
+    xdebug.remote_enable=On
+    xdebug.remote_autostart=On
+    xdebug.remote_host="{{ ip_address }}"
+    xdebug.remote_port=9000
+    xdebug.remote_handler="dbgp"
+    xdebug.remote_log=/tmp/xdebug_remote_log
+{% endif %}

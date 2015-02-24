@@ -87,6 +87,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             'servername' => server_config['host_name'],
             'ip_address' => server_config['ip_address'],
             'doc_root'   => server_config['doc_root'],
+            'env'        => 'local',
         }
         if host == 'webserver' then
             extra_vars['db_servername'] = server_configs['dbserver']['host_name']

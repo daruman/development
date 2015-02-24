@@ -1,0 +1,15 @@
+---
+- name: stat /etc/httpd/conf.d/php.conf
+  stat: path=/etc/httpd/conf.d/php.conf
+  register: phpconf_stat
+  when: env == "local"
+  changed_when: false
+  ignore_errors: true
+  tags: php56
+
+- name: set PHP_IDE_CONFIG env to /etc/httpd/conf.d/php.conf
+  lineinfile: dest=/etc/profile line="export PHP_IDE_CONFIG='serverName=vagrant'"
+  when: phpconf_stat.stat.exists
+  tags: php56
+
+
