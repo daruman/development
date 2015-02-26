@@ -1848,4 +1848,11 @@ xdebug.remote_host="{{ ip_address }}"
 xdebug.remote_port=9000
 xdebug.remote_handler="dbgp"
 xdebug.remote_log={{ xdebug_logfile_path }}
+
+; 表示する子要素の数
+xdebug.var_display_max_children = -1
+; 表示する要素の数
+xdebug.var_display_max_data = -1
+; 表示する階層の深さ
+xdebug.var_display_max_depth = -1
 {% endif %}
