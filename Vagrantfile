@@ -14,16 +14,16 @@ CENT_OS_6 = {
     'tag_httpd' => 'apache22',
     'box_name'  => 'opscode_centos-6.6',
     'box_url'   => 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-6.6_chef-provisionerless.box',
-}
+} if !defined? CENT_OS_6
 CENT_OS_7 = {
     'tag_os'    => 'CentOs7',
     'tag_httpd' => 'apache24',
     'box_name'  => 'opscode_centos-7.0',
     'box_url'   => 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.0_chef-provisionerless.box',
-}
+} if !defined? CENT_OS_7
 
 # windows判別
-IS_WINDOWS = false
+IS_WINDOWS = false if !defined? IS_WINDOWS
 if RUBY_PLATFORM.downcase =~ /mswin(?!ce)|mingw|cygwin|bccwin/
     IS_WINDOWS = true
 end
