@@ -5,8 +5,8 @@
     - group_vars/all
     - group_vars/toolservers
   roles:
-    # core、rubyは依存先から呼ばれる
+    # core、nodejsは依存先から呼ばれる
     # - core
-    # - ruby
-    - frontend_devtool
+    - ruby
+    - gitbook
 

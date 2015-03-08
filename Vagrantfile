@@ -71,7 +71,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             'ip_address'      => '192.168.30.12',
             'host_name'       => 'develop-env-tool.local',
             'os_setting'      => CENT_OS_6,
-            'ansible_tags'    => ['frontend_devtool', 'ruby'],
+            'ansible_tags'    => ['ruby', 'gitbook'],
             'playbook'        => 'ansible/start.yml',
         },
     }

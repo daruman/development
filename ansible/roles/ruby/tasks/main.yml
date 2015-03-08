@@ -58,10 +58,7 @@
 
 - name: installed gems
   gem: name={{ item }} state=present user_install=no
-  with_items:
-    - rake
-    - bundler
-    - rb-inotify
+  with_items: gem_package
   when: result.rc !=0 or result.stdout.split()[1] != ruby.version
   tags: ruby
 
