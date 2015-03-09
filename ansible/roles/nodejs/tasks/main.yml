@@ -1,5 +1,5 @@
 ---
-- name: Installed Node.js ans npm
+- name: Installed Node.js and npm
   yum: name=npm enablerepo=epel state=latest
   tags: nodejs
 

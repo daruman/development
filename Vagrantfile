@@ -71,7 +71,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             'ip_address'      => '192.168.30.12',
             'host_name'       => 'develop-env-tool.local',
             'os_setting'      => CENT_OS_6,
-            'ansible_tags'    => ['ruby', 'gitbook'],
+            'ansible_tags'    => ['ruby', 'nodejs', 'gitbook'],
             'playbook'        => 'ansible/start.yml',
         },
     }
@@ -80,6 +80,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         config.vm.box = server_config['os_setting']['box_name']
         if server_config['os_setting'].key?('box_url') then
             config.vm.box = server_config['os_setting']['box_url']
+        end
+
+        # init vagrant-cachier
+        if Vagrant.has_plugin?("vagrant-cachier")
+            config.cache.scope = :machine
         end
 
         # ansibleに渡す値
