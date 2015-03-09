@@ -22,7 +22,7 @@
   tags: gitbook
 
 - name: install calibre
-  command: tar -xvjf /tmp/calibre-1.48.0-x86_64.tar.bz2 -C /opt/calibre
+  command: tar -xjf /tmp/calibre-1.48.0-x86_64.tar.bz2 -C /opt/calibre
   when: calibre_stat.stat.exists == false
   tags: gitbook
 
