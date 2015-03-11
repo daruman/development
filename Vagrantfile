@@ -23,11 +23,15 @@ CENT_OS_7 = {
 } if !defined? CENT_OS_7
 
 # windows判別
-IS_WINDOWS = false if !defined? IS_WINDOWS
-if RUBY_PLATFORM.downcase =~ /mswin(?!ce)|mingw|cygwin|bccwin/
-    IS_WINDOWS = true
+def isWindows
+    if RUBY_PLATFORM.downcase =~ /mswin(?!ce)|mingw|cygwin|bccwin/
+        return true
+    end
+    return false
 end
-
+if !defined? IS_WINDOWS then
+    IS_WINDOWS = isWindows
+end
 
 
 # Configuration
