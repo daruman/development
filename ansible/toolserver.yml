@@ -1,5 +1,5 @@
 ---
-- hosts: toolserver
+- hosts: toolservers
   sudo: true
   vars_files:
     - group_vars/all
