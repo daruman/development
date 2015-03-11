@@ -84,7 +84,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
         # init vagrant-cachier
         if Vagrant.has_plugin?("vagrant-cachier")
-            config.cache.scope = :machine
+            config.cache.scope = :box
             # config.cache.enable :yum
         end
 

@@ -13,7 +13,7 @@
   tags: ruby
 
 - name: Download binary from ruby offical website
-  get_url: url={{ ruby.url }} dest={{ ruby.src_path }}
+  get_url: url={{ ruby.url }} dest={{ ruby.src_path }}{{ ruby.file }}
   when: result.rc !=0 or result.stdout.split()[1] != ruby.version
   tags: ruby
 

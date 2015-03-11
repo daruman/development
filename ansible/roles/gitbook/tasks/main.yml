@@ -6,8 +6,9 @@
   changed_when: false
   tags: gitbook
 
+# [Ansibleのget_urlはdestをファイル名にしてsha256sumを指定するのがお勧め - Qiita](http://qiita.com/hnakamur/items/8b8870c640205d438826)
 - name: Download calibre
-  get_url: url=http://download.calibre-ebook.com/1.48.0/calibre-1.48.0-x86_64.tar.bz2 dest=/tmp/
+  get_url: url=http://download.calibre-ebook.com/1.48.0/calibre-1.48.0-x86_64.tar.bz2 dest=/tmp/calibre-1.48.0-x86_64.tar.bz2
   tags: gitbook
 
 - name: mkdir calibre dir
