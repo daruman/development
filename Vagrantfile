@@ -71,7 +71,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             'ip_address'      => '192.168.30.12',
             'host_name'       => 'develop-env-tool.local',
             'os_setting'      => CENT_OS_6,
-            'ansible_tags'    => ['frontend_devtool', 'ruby'],
+            'ansible_tags'    => ['ruby', 'nodejs', 'gitbook'],
             'playbook'        => 'ansible/start.yml',
         },
     }
@@ -79,7 +79,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     server_configs.each do |host, server_config|
         config.vm.box = server_config['os_setting']['box_name']
         if server_config['os_setting'].key?('box_url') then
-            config.vm.box = server_config['os_setting']['box_url']
+            config.vm.box_url = server_config['os_setting']['box_url']
+        end
+
+        # init vagrant-cachier
+        if Vagrant.has_plugin?("vagrant-cachier")
+            config.cache.scope = :box
+            # config.cache.enable :yum
         end
 
         # ansibleに渡す値
@@ -97,7 +103,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             extra_vars['web_ip_address'] = server_configs['webserver']['ip_address']
         end
 
-        # 実行tags
+        # 実行
         os_setting = server_config['os_setting']
         tags = [os_setting['tag_os'], os_setting['tag_httpd']] + server_config['ansible_tags']
         if os_setting.key?('selinux') then

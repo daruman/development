@@ -1,9 +1,0 @@
----
-- name: Install sass
-  gem: name=sass state=latest user_install=no
-  tags: frontend_devtool
-
-- name: Install Compass
-  gem: name=compass state=latest user_install=no
-  tags: frontend_devtool
-

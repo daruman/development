@@ -1,0 +1,53 @@
+---
+- name: get currently installed gitbook version
+  command: gitbook --version
+  register: result
+  ignore_errors: true
+  changed_when: false
+  tags: gitbook
+
+# get_url遅すぎるので、予め落としておいたものを使用(どのみち最新を使えないのでwgetする意味が薄い)
+- name: put calibre
+  copy: src=calibre-1.48.0-x86_64.tar.bz2 dest=/tmp/calibre-1.48.0-x86_64.tar.bz2
+  tags: gitbook
+
+- name: mkdir calibre dir
+  file: path=/opt/calibre/ state=directory owner=root group=root mode=0755
+  tags: gitbook
+
+- name: stat calibre
+  stat: path=/opt/calibre/calibre
+  register: calibre_stat
+  changed_when: false
+  ignore_errors: true
+  tags: gitbook
+
+- name: install calibre
+  command: tar -xjf /tmp/calibre-1.48.0-x86_64.tar.bz2 -C /opt/calibre
+  when: calibre_stat.stat.exists == false
+  tags: gitbook
+
+- name: Prepare to use the ebook-convert
+  file: src=/opt/calibre/ebook-convert dest=/usr/bin/ebook-convert state=link
+  tags: gitbook
+
+- name: install Xvfb
+  yum: name=xorg-x11-server-Xvfb.x86_64 state=latest
+  tags: gitbook
+
+- name: stat ebook-convert wrapper
+  stat: path=/usr/local/bin/ebook-convert
+  register: wrapper
+  changed_when: false
+  ignore_errors: true
+  tags: gitbook
+
+- name: set ebook-convert wrapper
+  copy: src=ebook-convert dest=/usr/local/bin/ebook-convert mode=0755
+  when: wrapper.stat.exists == false
+  tags: gitbook
+
+- name: install Japanese Font
+  yum: name="@Japanese Support" state=latest
+  tags: gitbook
+

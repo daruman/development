@@ -1,0 +1,9 @@
+---
+- name: Installed Node.js and npm
+  yum: name=npm enablerepo=epel state=latest
+  tags: nodejs
+
+- name: Install npm packages
+  npm: name={{ item }} state=latest global=yes
+  with_items: npm_package
+  tags: nodejs

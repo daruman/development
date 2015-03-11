@@ -1,3 +1,9 @@
 .vagrant/
 *.box
+.sass-cache/
+coding_standard/
+gulpfile.js
 node_modules/
+package.json
+projectCode/webroot/css/
+projectCode/webroot/sass/
