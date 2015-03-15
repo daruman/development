@@ -34,6 +34,16 @@ if !defined? IS_WINDOWS then
 end
 
 
+# Required plugin ready
+# ================================================================================
+
+# [Vagrant で共有フォルダが使用できなくなったので解決メモ — kashew_nuts-blog][http://kashewnuts.bitbucket.org/2013/08/25/vagrantvbguest.html]
+unless Vagrant.has_plugin?('vagrant-vbguest')
+  system('vagrant plugin install vagrant-vbguest') || exit!
+  exit system('vagrant', *ARGV)
+end
+
+
 # Configuration
 # ================================================================================
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -84,12 +94,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         config.vm.box = server_config['os_setting']['box_name']
         if server_config['os_setting'].key?('box_url') then
             config.vm.box_url = server_config['os_setting']['box_url']
-        end
-
-        # init vagrant-cachier
-        if Vagrant.has_plugin?("vagrant-cachier")
-            config.cache.scope = :box
-            # config.cache.enable :yum
         end
 
         # ansibleに渡す値

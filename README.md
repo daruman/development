@@ -17,20 +17,6 @@ ansibleに関しては主にこれをベースに構成
 - ansible (windowsは動かないので不要)
 
 
-Vagrantにplugin追加
---------------------------------------------------------------------------------
-
-GuestOS次第では毎回起動後`sudo /etc/init.d/vboxadd setup`としないとエラーが出るので、  
-自動でやってくれるpluginをvagrantに追加する
-
-```
-$ vagrant plugin install vagrant-vbguest
-```
-
-参考: [Vagrant で共有フォルダが使用できなくなったので解決メモ — kashew_nuts-blog][1]
-
-
-
 通常の使用方法(初回、そのまま使用)
 ================================================================================
 
@@ -135,8 +121,4 @@ webserverとdbserverの疎通確認
 # hostOSから
 $ vagrant ssh webserver -c 'test_connectivity'
 ```
-
-
-
-[1]: http://kashewnuts.bitbucket.org/2013/08/25/vagrantvbguest.html
 
