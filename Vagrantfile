@@ -72,8 +72,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         },
         'toolserver' => {
             'inventory_group' => 'toolservers',
-            'machine_name'    => 'env_tool_server',
-            'ip_address'      => '192.168.30.12',
+            'machine_name'    => 'env_toolserver',
+            'ip_address'      => '192.168.30.11',
             'host_name'       => 'develop-env-tool.local',
             'os_setting'      => CENT_OS_6,
             'ansible_tags'    => ['ruby', 'nodejs', 'gitbook'],
