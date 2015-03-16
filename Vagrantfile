@@ -60,23 +60,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #
     # --------------------------------------------------------------------------------
     server_configs = {
-        'webserver' => {
-            'inventory_group' => 'webservers',
-            'machine_name'    => 'env_web_server',
+        'mainserver' => {
+            'inventory_group' => 'mainservers',
+            'machine_name'    => 'env_mainserver',
             'ip_address'      => '192.168.30.10',
             'host_name'       => 'develop-env.local',
             'doc_root'        => '/vagrant/projectCode/webroot',
             'os_setting'      => CENT_OS_6,
-            'ansible_tags'    => ['php56'],
-            'playbook'        => 'ansible/start.yml',
-        },
-        'dbserver' =>{
-            'inventory_group' => 'dbservers',
-            'machine_name'    => 'env_db_server',
-            'ip_address'      => '192.168.30.11',
-            'host_name'       => 'develop-env-db.local',
-            'os_setting'      => CENT_OS_6,
-            'ansible_tags'    => ['mysql56'],
+            'ansible_tags'    => ['php56', 'mysql56'],
             'playbook'        => 'ansible/start.yml',
         },
         'toolserver' => {
@@ -103,13 +94,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             'doc_root'   => server_config['doc_root'],
             'env'        => 'local',
         }
-        if host == 'webserver' then
-            extra_vars['db_servername'] = server_configs['dbserver']['host_name']
-            extra_vars['db_ip_address'] = server_configs['dbserver']['ip_address']
-        elsif host == 'dbserver' then
-            extra_vars['web_servername'] = server_configs['webserver']['host_name']
-            extra_vars['web_ip_address'] = server_configs['webserver']['ip_address']
-        end
 
         # 実行
         os_setting = server_config['os_setting']

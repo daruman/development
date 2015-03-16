@@ -1,10 +1,12 @@
 ---
-- hosts: dbservers
+- hosts: mainservers
   sudo: true
   vars_files:
     - group_vars/all
-    - group_vars/dbservers
+    - group_vars/mainservers
   roles:
     # coreは依存先から呼ばれる
     # - core
+    - apache
+    - php
     - mysql

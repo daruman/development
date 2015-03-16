@@ -15,17 +15,6 @@
     - mysql56
     - mysql55
 
-- name: 他サーバからのアクセス可能に
-  mysql_user:
-    name={{ database.user }}
-    password={{ database.pass }}
-    host={{ web_ip_address }}
-    priv=*.*:ALL,GRANT
-    state=present
-  tags:
-    - mysql56
-    - mysql55
-
 - name: Put start query file
   template: src=start.sql.j2 dest=/tmp/start.sql
   tags:

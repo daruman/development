@@ -1,8 +1,8 @@
 ---
-- hosts: webservers
+- hosts: mainservers
   sudo: true
   vars_files:
     - group_vars/all
-    - group_vars/webservers
+    - group_vars/mainservers
   roles:
     - project

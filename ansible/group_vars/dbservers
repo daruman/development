@@ -1,8 +1,0 @@
----
-# test database setting
-database:
-    db: test_database
-    user: webserver
-    pass: webserver
-    table: test_table
-

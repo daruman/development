@@ -6,3 +6,23 @@ npm_package:
 # - bower
 # - yo
 - gitbook
+
+
+# rubyに関するパラメータ
+ruby_dependencies:
+- libffi-devel
+- libyaml-devel
+
+ruby:
+  version: 2.2.0
+  url: ftp://ftp.ruby-lang.org/pub/ruby/ruby-2.2.0.tar.gz
+  dir: ruby-2.2.0
+  file: ruby-2.2.0.tar.gz
+  src_path: /usr/local/src/
+
+gem_package:
+- rake
+- bundler
+- rb-inotify
+- sass
+
