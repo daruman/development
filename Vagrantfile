@@ -50,13 +50,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # ユーザー定義
     #
-    # | inventory_group |
-    # | machine_name    | 作成されるvirtualboxのマシン名
-    # | ip_address      | hostOSのhostsの設定と合わせる(apacheを置かないdbサーバ等のhost名はdummyで良い)
-    # | host_name       | apacheのドキュメントルートになる
-    # | os_setting      | 使用するOS設定(定数参照)
-    # | ansible_tags    | 使用するansible tags(OSとhttpdは自動設定)[etc. php56,web_project,mysql56,db_project]
-    # | playbook        | 基本変更する必要無し
+    # | inventory_group  |
+    # | machine_name     | 作成されるvirtualboxのマシン名
+    # | ip_address       | hostOSのhostsの設定と合わせる(apacheを置かないdbサーバ等のhost名はdummyで良い)
+    # | host_name        | apacheのドキュメントルートになる
+    # | os_setting       | 使用するOS設定(定数参照)
+    # | ansible_tags     | 使用するansible tags(OSとhttpdは自動設定)[etc. php56,web_project,mysql56,db_project]
+    # | playbook         | 基本変更する必要無し
+    # | forwarding_ports | forwardするport番号
     #
     # --------------------------------------------------------------------------------
     server_configs = {
@@ -78,6 +79,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             'os_setting'      => CENT_OS_6,
             'ansible_tags'    => ['ruby', 'nodejs', 'gitbook'],
             'playbook'        => 'ansible/start.yml',
+            # 3000 => ruby and Node.js server, 8000 => php and python server
+            'forwarding_ports' => [3000, 8000],
         },
     }
 
@@ -106,6 +109,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             server.vm.hostname = server_config['host_name']
             server.vm.network :private_network, ip: server_config['ip_address']
             server.ssh.forward_agent = true
+
+            if server_config.key?('forwarding_ports') then
+                for port in server_config['forwarding_ports'] do
+                    server.vm.network :forwarded_port, host: port, guest: port
+                end
+            end
 
             server.vm.provider :virtualbox do |v|
                 # virtualboxのGUI上の名前変更
